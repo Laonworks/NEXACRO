@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="Login" width="1280" height="720" titletext="HR Admin - 로그인" onload="Login_onload">
+    <Layouts>
+      <Layout height="720" mobileorientation="none" width="1280">
+        <Static id="stTitle" taborder="0" text="HR Admin" left="490" top="180" width="300" height="50" font="bold 28px/normal &quot;Malgun Gothic&quot;" textAlign="center" verticalAlign="middle"/>
+        <Static id="stSubTitle" taborder="1" text="사원/인사관리 시스템" left="490" top="230" width="300" height="24" color="#888888" textAlign="center" verticalAlign="middle"/>
+        <Static id="stUserId" taborder="2" text="아이디" left="490" top="290" width="80" height="32" verticalAlign="middle"/>
+        <Edit id="edtUserId" taborder="3" left="580" top="290" width="210" height="32" displaynulltext="아이디 입력"/>
+        <Static id="stPassword" taborder="4" text="비밀번호" left="490" top="330" width="80" height="32" verticalAlign="middle"/>
+        <Edit id="edtPassword" taborder="5" left="580" top="330" width="210" height="32" password="true" displaynulltext="비밀번호 입력" onkeyup="edtPassword_onkeyup"/>
+        <Button id="btnLogin" taborder="6" text="로그인" left="490" top="380" width="300" height="40" onclick="btnLogin_onclick"/>
+        <Static id="stMessage" taborder="7" text="" left="490" top="430" width="300" height="28" color="#d9534f" textAlign="center" verticalAlign="middle"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+/*******************************************************************************
+ * 01. 로그인 화면 (Login.xfdl)
+ * - 학습 포인트: Form 생명주기(onload), 컴포넌트 값 접근, 이벤트 처리, 검증
+ * - 1단계에서는 서버 없이 고정 계정(admin / 1234)으로 검증합니다.
+ *   (5단계 서버 연동 실습에서 transaction 방식으로 교체합니다)
+ ******************************************************************************/
+
+// 폼 로드 시: 아이디 입력란에 포커스
+this.Login_onload = function(obj, e)
+{
+	this.edtUserId.setFocus();
+};
+
+// 로그인 버튼 클릭
+this.btnLogin_onclick = function(obj, e)
+{
+	this.fnLogin();
+};
+
+// 비밀번호 입력란에서 Enter 키 입력 시 로그인 시도
+this.edtPassword_onkeyup = function(obj, e)
+{
+	if (e.keycode == 13) {
+		this.fnLogin();
+	}
+};
+
+// 로그인 처리 (사용자 정의 함수)
+this.fnLogin = function()
+{
+	var sUserId = this.edtUserId.value;
+	var sPassword = this.edtPassword.value;
+
+	// 1) 빈값 검증
+	if (this.fnIsNull(sUserId)) {
+		this.stMessage.set_text("아이디를 입력하세요.");
+		this.edtUserId.setFocus();
+		return;
+	}
+	if (this.fnIsNull(sPassword)) {
+		this.stMessage.set_text("비밀번호를 입력하세요.");
+		this.edtPassword.setFocus();
+		return;
+	}
+
+	// 2) 계정 검증 - 1단계에서는 고정 계정 사용
+	if (sUserId == "admin" && sPassword == "1234") {
+		this.stMessage.set_text("");
+		// (6단계에서 추가) 로그인 사용자를 application 전역에 보관하고 메인으로 전환
+		nexacro.getApplication().gvUserId = sUserId;
+		this.getOwnerFrame().set_formurl("Base::Main.xfdl");
+	} else {
+		this.stMessage.set_text("아이디 또는 비밀번호가 올바르지 않습니다.");
+		this.edtPassword.set_value("");
+		this.edtPassword.setFocus();
+	}
+};
+
+// 빈값 여부 확인 (8단계에서 공통모듈 gfn_isNull로 이동 예정)
+this.fnIsNull = function(sValue)
+{
+	return (sValue == null || sValue == undefined || String(sValue).trim() == "");
+};
+]]></Script>
+  </Form>
+</FDL>

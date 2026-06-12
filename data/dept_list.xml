@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="ErrorCode" type="int">0</Parameter>
+		<Parameter id="ErrorMsg" type="string">SUCCESS</Parameter>
+	</Parameters>
+	<Dataset id="dsDept">
+		<ColumnInfo>
+			<Column id="DEPT_CD" type="STRING" size="10"/>
+			<Column id="DEPT_NM" type="STRING" size="50"/>
+			<Column id="USE_YN" type="STRING" size="1"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="DEPT_CD">D001</Col>
+				<Col id="DEPT_NM">경영지원팀</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="DEPT_CD">D002</Col>
+				<Col id="DEPT_NM">인사팀</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="DEPT_CD">D003</Col>
+				<Col id="DEPT_NM">개발1팀</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="DEPT_CD">D004</Col>
+				<Col id="DEPT_NM">개발2팀</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="DEPT_CD">D005</Col>
+				<Col id="DEPT_NM">영업팀</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="DEPT_CD">D006</Col>
+				<Col id="DEPT_NM">마케팅팀</Col>
+				<Col id="USE_YN">N</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>

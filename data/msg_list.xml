@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="ErrorCode" type="int">0</Parameter>
+		<Parameter id="ErrorMsg" type="string">SUCCESS</Parameter>
+	</Parameters>
+	<Dataset id="dsMsg">
+		<ColumnInfo>
+			<Column id="MSG_ID" type="STRING" size="30"/>
+			<Column id="KO" type="STRING" size="200"/>
+			<Column id="EN" type="STRING" size="200"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="MSG_ID">TITLE_EMPLIST</Col>
+				<Col id="KO">사원 목록 (서버 연동)</Col>
+				<Col id="EN">Employee List</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">LBL_EMPNM</Col>
+				<Col id="KO">사원명</Col>
+				<Col id="EN">Name</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">BTN_SEARCH</Col>
+				<Col id="KO">조회</Col>
+				<Col id="EN">Search</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">BTN_RELOAD</Col>
+				<Col id="KO">전체 재조회</Col>
+				<Col id="EN">Reload All</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">BTN_EXCEL</Col>
+				<Col id="KO">엑셀 복사</Col>
+				<Col id="EN">Copy for Excel</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">BTN_LANG</Col>
+				<Col id="KO">English</Col>
+				<Col id="EN">한국어</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">MSG_TOTAL</Col>
+				<Col id="KO">총 {0}명</Col>
+				<Col id="EN">Total: {0}</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">MSG_COPIED</Col>
+				<Col id="KO">클립보드에 복사되었습니다. 엑셀에서 붙여넣기 하세요.</Col>
+				<Col id="EN">Copied to clipboard. Paste into Excel.</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">HDR_EMPID</Col>
+				<Col id="KO">사번</Col>
+				<Col id="EN">Emp ID</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">HDR_EMPNM</Col>
+				<Col id="KO">사원명</Col>
+				<Col id="EN">Name</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">HDR_DEPT</Col>
+				<Col id="KO">부서</Col>
+				<Col id="EN">Dept.</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">HDR_POSITION</Col>
+				<Col id="KO">직급</Col>
+				<Col id="EN">Position</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">HDR_HIREDT</Col>
+				<Col id="KO">입사일</Col>
+				<Col id="EN">Hire Date</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">HDR_EMAIL</Col>
+				<Col id="KO">이메일</Col>
+				<Col id="EN">Email</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">HDR_PHONE</Col>
+				<Col id="KO">전화번호</Col>
+				<Col id="EN">Phone</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">HDR_SALARY</Col>
+				<Col id="KO">연봉</Col>
+				<Col id="EN">Salary</Col>
+			</Row>
+			<Row>
+				<Col id="MSG_ID">HDR_USEYN</Col>
+				<Col id="KO">재직</Col>
+				<Col id="EN">Active</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>

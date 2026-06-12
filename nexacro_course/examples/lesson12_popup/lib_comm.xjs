@@ -1,0 +1,56 @@
+/*
+  [12차시] 공통 스크립트 라이브러리 (lib_comm.xjs)
+  - 여러 폼에서 반복되는 코드를 한 곳에 모은다.
+  - 사용법: 폼 스크립트 상단에서
+      include "Lib::lib_comm.xjs";
+    (Lib 은 TypeDefinition 에 정의한 경로 별칭)
+*/
+
+/* null / undefined / 공백 → 기본값 치환 */
+this.gfn_nvl = function(val, def)
+{
+	if (val == null || String(val).trim() == "") return (def == null ? "" : def);
+	return val;
+};
+
+/* 빈 값 여부 */
+this.gfn_isEmpty = function(val)
+{
+	return (val == null || String(val).trim() == "");
+};
+
+/* 공통 알림 — 추후 디자인된 메시지 박스로 한 번에 교체 가능하도록 래핑 */
+this.gfn_alert = function(msg)
+{
+	alert(msg);
+};
+
+/* 공통 확인 */
+this.gfn_confirm = function(msg)
+{
+	return confirm(msg);
+};
+
+/* yyyyMMdd → yyyy-MM-dd 표시 변환 */
+this.gfn_fmtDate = function(s)
+{
+	if (this.gfn_isEmpty(s) || String(s).length != 8) return "";
+	s = String(s);
+	return s.substr(0, 4) + "-" + s.substr(4, 2) + "-" + s.substr(6, 2);
+};
+
+/* 공통 팝업 호출
+   - id      : 팝업 구분 이름
+   - url     : "Base::POP_xxx.xfdl" 형태
+   - args    : 팝업에 넘길 값 객체 {key: value, ...}
+   - callback: 팝업이 닫힐 때 호출될 함수명(문자열). fn(popupId, rtnVal) 형태
+   - w, h    : 팝업 크기                                         */
+this.gfn_openPopup = function(id, url, args, callback, w, h)
+{
+	var objParent = this.getOwnerFrame();
+	var popup = new ChildFrame();
+	popup.init(id, 0, 0, this.gfn_nvl(w, 500), this.gfn_nvl(h, 400), null, null, url);
+	popup.set_dragmovetype("all");        // 타이틀바 드래그 이동
+	popup.set_openalign("center middle"); // 화면 중앙
+	popup.showModal(objParent, args, this, callback);
+};

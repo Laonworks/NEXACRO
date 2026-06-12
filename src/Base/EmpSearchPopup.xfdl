@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="EmpSearchPopup" width="600" height="500" titletext="사원 검색" onload="EmpSearchPopup_onload">
+    <Objects>
+      <Dataset id="dsEmp">
+        <ColumnInfo>
+          <Column id="EMP_ID" type="STRING" size="10"/>
+          <Column id="EMP_NM" type="STRING" size="50"/>
+          <Column id="DEPT_CD" type="STRING" size="10"/>
+          <Column id="POSITION_CD" type="STRING" size="10"/>
+          <Column id="GENDER_CD" type="STRING" size="1"/>
+          <Column id="HIRE_DT" type="STRING" size="8"/>
+          <Column id="EMAIL" type="STRING" size="100"/>
+          <Column id="PHONE" type="STRING" size="20"/>
+          <Column id="SALARY" type="INT" size="10"/>
+          <Column id="USE_YN" type="STRING" size="1"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="dsDept">
+        <ColumnInfo>
+          <Column id="DEPT_CD" type="STRING" size="10"/>
+          <Column id="DEPT_NM" type="STRING" size="50"/>
+          <Column id="USE_YN" type="STRING" size="1"/>
+        </ColumnInfo>
+      </Dataset>
+    </Objects>
+    <Layouts>
+      <Layout height="500" mobileorientation="none" width="600">
+        <Static id="stSearchNm" taborder="0" text="사원명" left="20" top="20" width="60" height="30" verticalAlign="middle"/>
+        <Edit id="edtSearchNm" taborder="1" left="85" top="20" width="200" height="30" onkeyup="edtSearchNm_onkeyup"/>
+        <Button id="btnSearch" taborder="2" text="검색" left="295" top="20" width="70" height="30" onclick="btnSearch_onclick"/>
+        <Grid id="grdEmp" taborder="3" left="20" top="65" width="560" height="350" binddataset="dsEmp" autofittype="col" oncelldblclick="grdEmp_oncelldblclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="90"/>
+                <Column size="110"/>
+                <Column size="130"/>
+                <Column size="90"/>
+                <Column size="140"/>
+              </Columns>
+              <Rows>
+                <Row size="32" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="사번"/>
+                <Cell col="1" text="사원명"/>
+                <Cell col="2" text="부서"/>
+                <Cell col="3" text="입사일"/>
+                <Cell col="4" text="이메일"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:EMP_ID" textAlign="center"/>
+                <Cell col="1" text="bind:EMP_NM" textAlign="center"/>
+                <Cell col="2" text="bind:DEPT_CD" displaytype="combotext" combodataset="dsDept" combocodecol="DEPT_CD" combodatacol="DEPT_NM" textAlign="center"/>
+                <Cell col="3" text="bind:HIRE_DT" textAlign="center"/>
+                <Cell col="4" text="bind:EMAIL"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="stHint" taborder="4" text="※ 더블클릭 또는 [선택] 버튼으로 사원을 선택합니다." left="20" top="420" width="350" height="24" color="#888888" verticalAlign="middle"/>
+        <Button id="btnSelect" taborder="5" text="선택" left="400" top="450" width="85" height="32" onclick="btnSelect_onclick"/>
+        <Button id="btnCancel" taborder="6" text="취소" left="495" top="450" width="85" height="32" onclick="btnCancel_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+/*******************************************************************************
+ * 07. 사원 검색 공통 팝업 (EmpSearchPopup.xfdl)  [중급]
+ * - 학습 포인트: 팝업 폼의 인자 수신(getOwnerFrame().arguments),
+ *   close(반환값)로 부모에게 결과 전달, 어느 화면에서든 재사용 가능한 설계
+ * - 호출 측 코드는 PopupDemo.xfdl 참고
+ ******************************************************************************/
+
+// 폼 로드: 부모가 넘긴 인자(초기 검색어) 수신 + 데이터 조회
+this.EmpSearchPopup_onload = function(obj, e)
+{
+	// ★ 부모의 showModal()에서 넘긴 인자 꺼내기
+	//   (arguments 접근 방식은 버전에 따라 다를 수 있음 — F1 레퍼런스 확인)
+	var oArgs = this.getOwnerFrame().arguments;
+	if (oArgs != undefined && oArgs["sInitNm"] != undefined) {
+		this.edtSearchNm.set_value(oArgs["sInitNm"]);
+	}
+
+	// 데이터 조회 (5단계 복습 — 정적 XML 서비스)
+	this.transaction("svcDept", "svcData::dept_list.xml", "", "dsDept=dsDept", "", "fnCallback");
+	this.transaction("svcEmp",  "svcData::emp_list.xml",  "", "dsEmp=dsEmp",  "", "fnCallback");
+};
+
+this.fnCallback = function(sSvcId, nErrorCode, sErrorMsg)
+{
+	if (nErrorCode < 0) {
+		this.alert("통신 오류: " + sErrorMsg);
+		return;
+	}
+	if (sSvcId == "svcEmp") {
+		this.fnFilter();   // 초기 검색어가 있으면 바로 적용
+	}
+};
+
+// 검색: 정적 XML은 전체를 반환하므로 클라이언트에서 filter (5단계 과제의 결론)
+this.btnSearch_onclick = function(obj, e)
+{
+	this.fnFilter();
+};
+
+this.edtSearchNm_onkeyup = function(obj, e)
+{
+	if (e.keycode == 13) {
+		this.fnFilter();
+	}
+};
+
+this.fnFilter = function()
+{
+	var sName = this.edtSearchNm.value;
+	if (sName == null || String(sName).trim() == "") {
+		this.dsEmp.filter("");
+	} else {
+		this.dsEmp.filter("String(EMP_NM).indexOf('" + sName + "') >= 0");
+	}
+};
+
+// 더블클릭 = 선택
+this.grdEmp_oncelldblclick = function(obj, e)
+{
+	this.fnSelect();
+};
+
+this.btnSelect_onclick = function(obj, e)
+{
+	this.fnSelect();
+};
+
+// ★ 선택값을 부모에게 반환하고 팝업 닫기
+//   close()의 인자는 문자열 — 여러 값은 JSON 문자열로 묶어 전달
+this.fnSelect = function()
+{
+	var nRow = this.dsEmp.rowposition;
+	if (nRow < 0) {
+		this.alert("사원을 선택하세요.");
+		return;
+	}
+	var oRtn = {
+		empId : this.dsEmp.getColumn(nRow, "EMP_ID"),
+		empNm : this.dsEmp.getColumn(nRow, "EMP_NM"),
+		deptCd: this.dsEmp.getColumn(nRow, "DEPT_CD")
+	};
+	this.close(JSON.stringify(oRtn));
+};
+
+// 취소: 빈 값 반환
+this.btnCancel_onclick = function(obj, e)
+{
+	this.close("");
+};
+]]></Script>
+  </Form>
+</FDL>

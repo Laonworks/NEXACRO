@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  [10차시] 서버 통신 — transaction()
+  학습 포인트
+   1. transaction(서비스ID, URL, 입력DS, 출력DS, 파라미터, 콜백) 6요소
+   2. "출력DS=서버DS" 매핑: 서버가 보낸 ds_out 이 화면의 ds_emp 로 들어온다
+   3. 콜백 함수에서 ErrorCode 로 성공/실패 분기
+  사전 준비
+   - mock_server 폴더에서: node server.js
+   - TypeDefinition > Services 에 등록: prefixid="svc", url="http://localhost:8090/"
+     (등록 없이 쓰려면 transaction URL 에 전체 주소를 적어도 된다)
+-->
+<FDL version="2.1">
+  <Form id="EmpSearch" width="900" height="600" titletext="서버 조회" onload="EmpSearch_onload">
+    <Objects>
+      <!-- 조회 결과를 받을 Dataset — 컬럼은 서버 응답이 채워주므로 비워둬도 된다 -->
+      <Dataset id="ds_emp"/>
+      <Dataset id="ds_dept"/>
+    </Objects>
+    <Layouts>
+      <Layout height="600" width="900">
+        <Static id="sta_bg" taborder="0" text="" left="20" top="20" right="20" height="60"
+                style="background:#eff5f8; border:1px solid #cccccc;"/>
+        <Static id="sta_dept" taborder="1" text="부서" left="40" top="36" width="50" height="28"/>
+        <Combo  id="cbo_dept" taborder="2" left="90" top="36" width="140" height="28"
+                innerdataset="ds_dept" codecolumn="CODE" datacolumn="NAME"/>
+        <Static id="sta_name" taborder="3" text="이름" left="250" top="36" width="50" height="28"/>
+        <Edit   id="edt_name" taborder="4" left="300" top="36" width="140" height="28"/>
+        <Button id="btn_search" taborder="5" text="조회" top="36" right="40" width="70" height="28" onclick="btn_search_onclick"/>
+
+        <Grid id="grd_emp" taborder="6" left="20" top="100" right="20" bottom="60" binddataset="ds_emp">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="90"/><Column size="110"/><Column size="120"/>
+                <Column size="110"/><Column size="120"/><Column size="180"/>
+              </Columns>
+              <Rows><Row size="28" band="head"/><Row size="26" band="body"/></Rows>
+              <Band id="head">
+                <Cell text="사번"/><Cell col="1" text="이름"/><Cell col="2" text="부서"/>
+                <Cell col="3" text="연봉"/><Cell col="4" text="입사일"/><Cell col="5" text="이메일"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:EMP_ID"/><Cell col="1" text="bind:EMP_NM"/>
+                <Cell col="2" text="bind:DEPT_CD" displaytype="combocontrol"
+                      combodataset="ds_dept" combocodecol="CODE" combodatacol="NAME"/>
+                <Cell col="3" text="bind:SALARY" displaytype="numbercontrol" mask="#,##0" textAlign="right"/>
+                <Cell col="4" text="bind:HIRE_DT" displaytype="datecontrol" mask="yyyy-MM-dd"/>
+                <Cell col="5" text="bind:EMAIL"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="sta_count" taborder="7" text="조회 결과: 0건" left="20" bottom="20" width="300" height="28"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+/* 폼 로드 시 부서 콤보부터 서버에서 받아온다 */
+this.EmpSearch_onload = function(obj:nexacro.Form, e:nexacro.LoadEventInfo)
+{
+	/* transaction 6요소
+	   1) strSvcID   : 이 통신을 구분하는 이름 (콜백에서 분기용)
+	   2) strURL     : 서비스 주소 (svc:: 는 TypeDefinition 의 prefixid)
+	   3) strInDs    : "보낼DS=서버가받을DS" (없으면 "")
+	   4) strOutDs   : "받을DS=서버가보낸DS"
+	   5) strArg     : "이름=값 이름=값" 파라미터
+	   6) strCallback: 응답 도착 시 호출될 함수명                     */
+	this.transaction("svcDeptList",
+	                 "svc::dept/list.do",
+	                 "",
+	                 "ds_dept=ds_dept",
+	                 "",
+	                 "fn_callback");
+};
+
+this.btn_search_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	// 파라미터는 "키=값" 을 공백으로 연결. 값은 따옴표 없이.
+	var args = "DEPT_CD=" + (this.cbo_dept.value || "")
+	         + " EMP_NM=" + (this.edt_name.value || "");
+
+	this.transaction("svcEmpList",
+	                 "svc::emp/list.do",
+	                 "",
+	                 "ds_emp=ds_out",      // 서버의 ds_out → 화면의 ds_emp
+	                 args,
+	                 "fn_callback");
+};
+
+/* ── 통신 공통 콜백 ──
+   errorCode <  0 : 통신 자체 실패(서버 다운, 404 등) 또는 서버가 보낸 오류
+   errorMsg       : 서버가 Parameters 로 내려준 메시지              */
+this.fn_callback = function(svcID, errorCode, errorMsg)
+{
+	if (errorCode < 0) {
+		alert("통신 오류 [" + svcID + "]\n" + errorMsg);
+		return;
+	}
+
+	// 서비스ID 로 후처리 분기
+	if (svcID == "svcEmpList") {
+		this.sta_count.set_text("조회 결과: " + this.ds_emp.getRowCount() + "건 — " + errorMsg);
+	}
+	else if (svcID == "svcDeptList") {
+		// 부서 콤보 맨 앞에 "전체" 항목 추가
+		var nRow = this.ds_dept.insertRow(0);
+		this.ds_dept.setColumn(nRow, "CODE", "");
+		this.ds_dept.setColumn(nRow, "NAME", "전체");
+		this.cbo_dept.set_index(0);
+	}
+};
+]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="ErrorCode" type="int">0</Parameter>
+		<Parameter id="ErrorMsg" type="string">SUCCESS</Parameter>
+	</Parameters>
+	<Dataset id="dsVacation">
+		<ColumnInfo>
+			<Column id="VAC_ID" type="STRING" size="10"/>
+			<Column id="EMP_ID" type="STRING" size="10"/>
+			<Column id="EMP_NM" type="STRING" size="50"/>
+			<Column id="VAC_TYPE" type="STRING" size="10"/>
+			<Column id="START_DT" type="STRING" size="8"/>
+			<Column id="END_DT" type="STRING" size="8"/>
+			<Column id="REASON" type="STRING" size="200"/>
+			<Column id="STATUS" type="STRING" size="10"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="VAC_ID">V0001</Col>
+				<Col id="EMP_ID">E1003</Col>
+				<Col id="EMP_NM">박지훈</Col>
+				<Col id="VAC_TYPE">V01</Col>
+				<Col id="START_DT">20260615</Col>
+				<Col id="END_DT">20260617</Col>
+				<Col id="REASON">가족 여행</Col>
+				<Col id="STATUS">S02</Col>
+			</Row>
+			<Row>
+				<Col id="VAC_ID">V0002</Col>
+				<Col id="EMP_ID">E1004</Col>
+				<Col id="EMP_NM">최수아</Col>
+				<Col id="VAC_TYPE">V02</Col>
+				<Col id="START_DT">20260620</Col>
+				<Col id="END_DT">20260620</Col>
+				<Col id="REASON">병원 진료</Col>
+				<Col id="STATUS">S01</Col>
+			</Row>
+			<Row>
+				<Col id="VAC_ID">V0003</Col>
+				<Col id="EMP_ID">E1007</Col>
+				<Col id="EMP_NM">오준서</Col>
+				<Col id="VAC_TYPE">V01</Col>
+				<Col id="START_DT">20260701</Col>
+				<Col id="END_DT">20260705</Col>
+				<Col id="REASON">여름 휴가</Col>
+				<Col id="STATUS">S01</Col>
+			</Row>
+			<Row>
+				<Col id="VAC_ID">V0004</Col>
+				<Col id="EMP_ID">E1002</Col>
+				<Col id="EMP_NM">이서연</Col>
+				<Col id="VAC_TYPE">V03</Col>
+				<Col id="START_DT">20260610</Col>
+				<Col id="END_DT">20260611</Col>
+				<Col id="REASON">경조사</Col>
+				<Col id="STATUS">S03</Col>
+			</Row>
+			<Row>
+				<Col id="VAC_ID">V0005</Col>
+				<Col id="EMP_ID">E1008</Col>
+				<Col id="EMP_NM">강하은</Col>
+				<Col id="VAC_TYPE">V01</Col>
+				<Col id="START_DT">20260622</Col>
+				<Col id="END_DT">20260624</Col>
+				<Col id="REASON">개인 사유</Col>
+				<Col id="STATUS">S02</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>

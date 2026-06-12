@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  [12차시] 화면 이동과 팝업 — 호출하는 쪽 (부모 폼)
+  학습 포인트
+   1. include 로 공통 라이브러리(.xjs) 불러쓰기
+   2. showModal 팝업: 부모 → 자식 파라미터 전달 (args 객체)
+   3. 자식 → 부모 결과 반환 (close(값) → 콜백 함수에서 수신)
+  ※ TypeDefinition 별칭 예: Base=실습폴더, Lib=라이브러리폴더
+-->
+<FDL version="2.1">
+  <Form id="EmpMain" width="800" height="500" titletext="팝업 호출 연습">
+    <Layouts>
+      <Layout height="500" width="800">
+        <Static id="sta_emp" taborder="0" text="담당 사원" left="20" top="30" width="80" height="28"/>
+        <Edit   id="edt_empNm" taborder="1" left="110" top="30" width="160" height="28" readonly="true"
+                tooltiptext="돋보기 버튼으로 사원을 검색하세요"/>
+        <Edit   id="edt_empId" taborder="2" left="280" top="30" width="100" height="28" readonly="true" visible="false"/>
+        <Button id="btn_pop" taborder="3" text="🔍" left="275" top="30" width="32" height="28" onclick="btn_pop_onclick"/>
+        <TextArea id="txa_log" taborder="4" left="20" top="80" right="20" bottom="20" readonly="true"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+include "Lib::lib_comm.xjs";   // 공통 함수 (gfn_openPopup 등)
+
+/* 돋보기 클릭 → 사원 검색 팝업 열기 */
+this.btn_pop_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	// 팝업에 넘길 값: 현재 입력된 이름을 초기 검색어로
+	var args = { searchName: this.edt_empNm.value };
+
+	this.gfn_openPopup("popEmp",                  // 팝업 id
+	                   "Base::EmpPopup.xfdl",     // 팝업 폼 경로
+	                   args,                      // 전달 파라미터
+	                   "fn_popupCallback",        // 닫힐 때 호출될 함수
+	                   520, 420);                 // 크기
+};
+
+/* ── 팝업이 닫히면 호출된다 ──
+   rtnVal : 팝업이 close() 에 담아 보낸 값 (취소 시 undefined)   */
+this.fn_popupCallback = function(popupId, rtnVal)
+{
+	if (popupId != "popEmp") return;
+
+	if (this.gfn_isEmpty(rtnVal)) {
+		this.txa_log.set_value((this.txa_log.value || "") + "팝업이 선택 없이 닫혔습니다.\n");
+		return;
+	}
+
+	// 자식이 보낸 JSON 문자열을 객체로 복원
+	var emp = JSON.parse(rtnVal);
+	this.edt_empId.set_value(emp.EMP_ID);
+	this.edt_empNm.set_value(emp.EMP_NM);
+	this.txa_log.set_value((this.txa_log.value || "")
+		+ "선택됨 → " + emp.EMP_ID + " / " + emp.EMP_NM + "\n");
+};
+]]></Script>
+  </Form>
+</FDL>

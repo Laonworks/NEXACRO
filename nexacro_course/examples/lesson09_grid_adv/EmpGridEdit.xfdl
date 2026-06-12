@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  [9차시] Grid 활용 심화 — 편집 가능한 Grid
+  학습 포인트
+   1. 셀 편집: edittype 속성 (text / combo / date ...)
+   2. 헤더 클릭 정렬: onheadclick + keystring 활용
+   3. Summary 밴드: expr="..." 로 합계/건수 자동 계산
+   4. rowtype 으로 추가/수정된 행 표시 → 11차시 "변경분만 서버 전송"의 기초
+-->
+<FDL version="2.1">
+  <Form id="EmpGridEdit" width="900" height="600" titletext="Grid 심화">
+    <Objects>
+      <Dataset id="ds_emp">
+        <ColumnInfo>
+          <Column id="EMP_ID"  type="STRING" size="10"/>
+          <Column id="EMP_NM"  type="STRING" size="30"/>
+          <Column id="DEPT_CD" type="STRING" size="10"/>
+          <Column id="SALARY"  type="INT"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="EMP_ID">E001</Col><Col id="EMP_NM">김철수</Col><Col id="DEPT_CD">D01</Col><Col id="SALARY">3500</Col></Row>
+          <Row><Col id="EMP_ID">E002</Col><Col id="EMP_NM">이영희</Col><Col id="DEPT_CD">D02</Col><Col id="SALARY">4200</Col></Row>
+          <Row><Col id="EMP_ID">E003</Col><Col id="EMP_NM">박민준</Col><Col id="DEPT_CD">D01</Col><Col id="SALARY">2900</Col></Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="ds_dept">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="10"/>
+          <Column id="NAME" type="STRING" size="30"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="CODE">D01</Col><Col id="NAME">개발팀</Col></Row>
+          <Row><Col id="CODE">D02</Col><Col id="NAME">영업팀</Col></Row>
+          <Row><Col id="CODE">D03</Col><Col id="NAME">인사팀</Col></Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Layouts>
+      <Layout height="600" width="900">
+        <Button id="btn_addrow" taborder="0" text="행 추가" left="20" top="20" width="90" height="30" onclick="btn_addrow_onclick"/>
+        <Button id="btn_delrow" taborder="1" text="행 삭제" left="120" top="20" width="90" height="30" onclick="btn_delrow_onclick"/>
+        <Button id="btn_changes" taborder="2" text="변경 내역 확인" left="220" top="20" width="120" height="30" onclick="btn_changes_onclick"/>
+        <Static id="sta_hint" taborder="3" text="※ 셀을 더블클릭하면 편집됩니다. 헤더를 클릭하면 정렬됩니다."
+                left="360" top="20" width="420" height="30" style="color:#888888;"/>
+
+        <Grid id="grd_emp" taborder="4" left="20" top="60" right="20" height="320"
+              binddataset="ds_emp" onheadclick="grd_emp_onheadclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="60"/>
+                <Column size="100"/>
+                <Column size="140"/>
+                <Column size="140"/>
+                <Column size="120"/>
+              </Columns>
+              <Rows>
+                <Row size="28" band="head"/>
+                <Row size="26" band="body"/>
+                <Row size="28" band="summ"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="상태"/>
+                <Cell col="1" text="사번"/>
+                <Cell col="2" text="이름"/>
+                <Cell col="3" text="부서"/>
+                <Cell col="4" text="연봉(만원)"/>
+              </Band>
+              <Band id="body">
+                <!-- expr 표현식: rowtype 으로 행 상태 표시 (1=정상,2=추가,4=수정) -->
+                <Cell expr="dataset.getRowType(currow)==2 ? '추가' : dataset.getRowType(currow)==4 ? '수정' : ''"
+                      style="color:#cc3300;"/>
+                <Cell col="1" text="bind:EMP_ID" edittype="normal"/>
+                <Cell col="2" text="bind:EMP_NM" edittype="normal"/>
+                <!-- 콤보 편집: 표시도 콤보, 편집도 콤보 -->
+                <Cell col="3" text="bind:DEPT_CD" displaytype="combocontrol" edittype="combo"
+                      combodataset="ds_dept" combocodecol="CODE" combodatacol="NAME"/>
+                <Cell col="4" text="bind:SALARY" displaytype="numbercontrol" edittype="masknumber"
+                      mask="#,##0" textAlign="right"/>
+              </Band>
+              <!-- Summary 밴드: expr 집계 함수 -->
+              <Band id="summ">
+                <Cell colspan="3" text="합계" textAlign="center"/>
+                <Cell col="3" expr="'인원: ' + dataset.getRowCount() + '명'" textAlign="center"/>
+                <Cell col="4" expr="dataset.getSum('SALARY')" mask="#,##0" displaytype="number" textAlign="right"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+this.btn_addrow_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	var nRow = this.ds_emp.addRow();
+	this.ds_emp.setColumn(nRow, "DEPT_CD", "D01");
+	this.ds_emp.setColumn(nRow, "SALARY", 0);
+	// 추가된 행의 이름 셀로 포커스 이동 후 바로 편집 시작
+	this.grd_emp.setCellPos(2);
+	this.grd_emp.setFocus();
+	this.grd_emp.showEditor(true);
+};
+
+this.btn_delrow_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	if (this.ds_emp.rowposition < 0) { alert("삭제할 행을 선택하세요."); return; }
+	this.ds_emp.deleteRow(this.ds_emp.rowposition);
+};
+
+/* ── 헤더 클릭 정렬 ──
+   keystring : "S:+컬럼" 오름차순 / "S:-컬럼" 내림차순
+   클릭할 때마다 +/- 를 토글한다.                       */
+this.grd_emp_onheadclick = function(obj:nexacro.Grid, e:nexacro.GridClickEventInfo)
+{
+	// 헤더 셀의 body 쪽 bind 컬럼명 추출
+	var colId = obj.getCellProperty("body", e.cell, "text");
+	if (colId == null || colId.indexOf("bind:") < 0) return;
+	colId = colId.replace("bind:", "");
+
+	var curKey = this.ds_emp.keystring || "";
+	var newKey = (curKey == "S:+" + colId) ? "S:-" + colId : "S:+" + colId;
+	this.ds_emp.set_keystring(newKey);
+	trace("정렬 적용 : " + newKey);
+};
+
+/* ── rowtype 으로 변경 내역 확인 ──
+   getRowType(): 1=NORMAL, 2=INSERT, 4=UPDATE / getDeletedRowCount()=삭제분
+   → 11차시에서 이 정보 그대로 서버에 보낸다 (변경분 전송)        */
+this.btn_changes_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	var ins = 0, upd = 0;
+	for (var i = 0; i < this.ds_emp.getRowCount(); i++) {
+		var t = this.ds_emp.getRowType(i);
+		if (t == nexacro.Dataset.ROWTYPE_INSERT) ins++;
+		else if (t == nexacro.Dataset.ROWTYPE_UPDATE) upd++;
+	}
+	alert("추가 " + ins + "건 / 수정 " + upd + "건 / 삭제 " + this.ds_emp.getDeletedRowCount() + "건");
+};
+]]></Script>
+  </Form>
+</FDL>

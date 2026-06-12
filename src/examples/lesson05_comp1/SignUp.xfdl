@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  [5차시] 기본 컴포넌트 I — 회원가입 입력 폼
+  학습 포인트
+   1. Edit / MaskEdit / TextArea / CheckBox / Radio 의 용도 구분
+   2. MaskEdit 의 mask 속성 (전화번호, 주민번호 등 형식 입력)
+   3. Radio 는 innerdataset 으로 항목을 정의한다 → Dataset 개념의 맛보기
+   4. 속성(Properties) 은 디자인 시점, set_xxx() 는 실행 시점 변경
+-->
+<FDL version="2.1">
+  <Form id="SignUp" width="800" height="600" titletext="회원가입">
+    <Objects>
+      <!-- Radio 항목용 내부 데이터셋: codecolumn=값, datacolumn=표시문구 -->
+      <Dataset id="ds_gender">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="10"/>
+          <Column id="NAME" type="STRING" size="20"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="CODE">M</Col><Col id="NAME">남성</Col></Row>
+          <Row><Col id="CODE">F</Col><Col id="NAME">여성</Col></Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Layouts>
+      <Layout height="600" width="800">
+        <Static id="sta_title" taborder="0" text="회원가입" left="20" top="15" width="200" height="35" font="bold 16pt"/>
+
+        <Static id="sta_id"    taborder="1" text="아이디"    left="20" top="70" width="90" height="28"/>
+        <Edit   id="edt_id"    taborder="2" left="120" top="70" width="180" height="28" maxlength="20"/>
+
+        <Static id="sta_pw"    taborder="3" text="비밀번호"  left="20" top="108" width="90" height="28"/>
+        <Edit   id="edt_pw"    taborder="4" left="120" top="108" width="180" height="28" password="true"/>
+
+        <Static id="sta_tel"   taborder="5" text="휴대전화"  left="20" top="146" width="90" height="28"/>
+        <!-- MaskEdit: 형식이 정해진 입력. type="string" + mask 조합 -->
+        <MaskEdit id="msk_tel" taborder="6" left="120" top="146" width="180" height="28"
+                  type="string" mask="###-####-####"/>
+
+        <Static id="sta_gender" taborder="7" text="성별"     left="20" top="184" width="90" height="28"/>
+        <Radio  id="rdo_gender" taborder="8" left="120" top="184" width="180" height="28"
+                innerdataset="ds_gender" codecolumn="CODE" datacolumn="NAME" direction="horizontal" value="M"/>
+
+        <Static id="sta_intro" taborder="9" text="자기소개"  left="20" top="222" width="90" height="28"/>
+        <TextArea id="txa_intro" taborder="10" left="120" top="222" width="350" height="90" maxlength="500"/>
+
+        <CheckBox id="chk_agree" taborder="11" text="개인정보 수집 및 이용에 동의합니다. (필수)"
+                  left="120" top="324" width="350" height="28"/>
+
+        <Button id="btn_submit" taborder="12" text="가입하기" left="120" top="370" width="120" height="36" onclick="btn_submit_onclick"/>
+        <Button id="btn_reset"  taborder="13" text="초기화"   left="250" top="370" width="120" height="36" onclick="btn_reset_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+this.btn_submit_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	// CheckBox 의 값은 value (true/false)
+	if (this.chk_agree.value != true) {
+		alert("개인정보 수집에 동의해야 가입할 수 있습니다.");
+		return;
+	}
+	if (this.edt_id.value == null || this.edt_id.value == "") {
+		alert("아이디를 입력하세요.");
+		this.edt_id.setFocus();
+		return;
+	}
+
+	var msg = "가입 정보 확인\n";
+	msg += "아이디 : "   + this.edt_id.value + "\n";
+	msg += "휴대전화 : " + this.msk_tel.value + "\n";       // mask 제외한 순수 값
+	msg += "성별 : "     + this.rdo_gender.value + "\n";    // 선택된 CODE 값 (M/F)
+	msg += "자기소개 : " + (this.txa_intro.value || "(없음)");
+	alert(msg);
+};
+
+/* 실행 시점에 속성을 바꿀 때는 반드시 set_xxx() 사용 (직접 대입 금지) */
+this.btn_reset_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	this.edt_id.set_value("");
+	this.edt_pw.set_value("");
+	this.msk_tel.set_value("");
+	this.rdo_gender.set_value("M");
+	this.txa_intro.set_value("");
+	this.chk_agree.set_value(false);
+	this.edt_id.setFocus();
+};
+]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,134 @@
+//XJS=comm.xjs
+
+/*******************************************************************************
+ * 08. 공통 함수 라이브러리 (comm.xjs)  [중급]
+ * - 사용법: 폼 스크립트 맨 위에  include "Comm::comm.xjs";  한 줄 추가
+ * - 포함된 폼의 this(폼 자신) 컨텍스트에서 실행되므로 화면 함수처럼 호출:
+ *     if (this.gfn_isNull(v)) { ... }
+ * - 명명 규칙: 공통 함수는 gfn_ 접두어 (화면 함수 fn_과 구분)
+ ******************************************************************************/
+
+/**
+ * 빈값 여부 확인 (1~3단계에서 화면마다 복사하던 fnIsNull의 공통화)
+ */
+this.gfn_isNull = function(sValue)
+{
+	return (sValue == null || sValue == undefined || String(sValue).trim() == "");
+};
+
+/**
+ * 공통 알림 — 시스템 메시지의 단일 통로
+ * (제목/로깅/다국어 처리를 나중에 여기 "한 곳"에만 추가하면 전 화면에 적용)
+ */
+this.gfn_alert = function(sMsg)
+{
+	this.alert(sMsg);
+};
+
+/**
+ * 공통 확인 — true/false 반환
+ */
+this.gfn_confirm = function(sMsg)
+{
+	return this.confirm(sMsg);
+};
+
+/**
+ * 오늘 날짜를 YYYYMMDD 문자열로 반환
+ */
+this.gfn_getToday = function()
+{
+	var d = new Date();
+	var sMonth = ("0" + (d.getMonth() + 1)).slice(-2);
+	var sDate  = ("0" + d.getDate()).slice(-2);
+	return "" + d.getFullYear() + sMonth + sDate;
+};
+
+/**
+ * 모달 팝업 공통 호출 (7단계 fnOpenPopup의 공통화)
+ * @param sPopupId  팝업 프레임 ID
+ * @param sUrl      팝업 폼 URL ("Base::EmpSearchPopup.xfdl")
+ * @param nWidth/nHeight  팝업 크기
+ * @param oArgs     팝업에 넘길 인자 객체
+ * @param sCallback 닫힐 때 호출될 함수명 (호출한 폼의 함수)
+ */
+this.gfn_openPopup = function(sPopupId, sUrl, nWidth, nHeight, oArgs, sCallback)
+{
+	var objChildFrame = new ChildFrame();
+	objChildFrame.init(sPopupId, 0, 0, nWidth, nHeight, null, null, sUrl);
+	objChildFrame.set_dragmovetype("all");
+	objChildFrame.set_openalign("center middle");
+	objChildFrame.showModal(this.getOwnerFrame(), oArgs, this, sCallback);
+};
+
+/**
+ * 공통코드 콤보 일괄 세팅 (3단계에서 화면마다 만들던 코드 Dataset의 공통화)
+ * - 전제: 앱 기동 시 공통코드 전체가 application Dataset(gdsCode)에 조회되어 있음
+ *   (Main.xfdl onload에서 "gdsCode=dsCode"로 수신 — app.xadl에 gdsCode 등록 필요)
+ * @param objCombo  대상 Combo
+ * @param sGroupCd  코드 그룹 ("POSITION", "GENDER", "USE_YN" ...)
+ */
+this.gfn_setCombo = function(objCombo, sGroupCd)
+{
+	var objApp = nexacro.getApplication();
+	if (objApp.gdsCode == undefined) {
+		this.gfn_alert("공통코드가 로드되지 않았습니다. (gdsCode)");
+		return;
+	}
+
+	// 그룹별 코드만 담은 Dataset을 동적 생성해 콤보에 연결
+	var objDs = new Dataset();
+	objDs.addColumn("CODE", "string");
+	objDs.addColumn("CODE_NM", "string");
+
+	objApp.gdsCode.filter("GROUP_CD == '" + sGroupCd + "'");
+	for (var i = 0; i < objApp.gdsCode.getRowCount(); i++) {
+		var nRow = objDs.addRow();
+		objDs.setColumn(nRow, "CODE",    objApp.gdsCode.getColumn(i, "CODE"));
+		objDs.setColumn(nRow, "CODE_NM", objApp.gdsCode.getColumn(i, "CODE_NM"));
+	}
+	objApp.gdsCode.filter("");
+
+	objCombo.set_innerdataset(objDs);
+	objCombo.set_codecolumn("CODE");
+	objCombo.set_datacolumn("CODE_NM");
+};
+
+/**
+ * 다국어 메시지 조회 (9단계에서 추가)
+ * - 전제: 앱 기동 시 메시지 리소스가 application Dataset(gdsMsg)에 조회되어 있고
+ *   (Main.xfdl onload — "gdsMsg=dsMsg"), 현재 언어가 gvLang("KO"/"EN")에 설정됨
+ * @param sMsgId  메시지 ID ("BTN_SEARCH" 등)
+ * @return 현재 언어의 문구. 리소스가 없으면 ID 그대로 반환(누락 발견용)
+ */
+this.gfn_msg = function(sMsgId)
+{
+	var objApp = nexacro.getApplication();
+	if (objApp.gdsMsg == undefined) {
+		return sMsgId;
+	}
+	var nRow = objApp.gdsMsg.findRow("MSG_ID", sMsgId);
+	if (nRow < 0) {
+		return sMsgId;   // 미등록 메시지는 ID가 그대로 보임 → 누락을 바로 발견
+	}
+	var sLang = (objApp.gvLang == undefined ? "KO" : objApp.gvLang);
+	return objApp.gdsMsg.getColumn(nRow, sLang);
+};
+
+/**
+ * 필수입력 일괄 검증 (★ 과제 — 직접 완성해 보세요)
+ * @param arrChecks  [[컴포넌트, "항목명"], ...] 형태의 배열
+ *   예) this.gfn_validate([[this.edtEmpId, "사번"], [this.edtEmpNm, "사원명"]])
+ * @return 모두 통과하면 true
+ */
+this.gfn_validate = function(arrChecks)
+{
+	// [과제 힌트]
+	// 1) arrChecks를 순회하며 각 컴포넌트의 .value를 gfn_isNull로 검사
+	// 2) 비어 있으면: gfn_alert(항목명 + "은(는) 필수 입력입니다.")
+	//    → 해당 컴포넌트 setFocus() → false 반환 (첫 오류에서 중단)
+	// 3) 전부 통과하면 true 반환
+	// 심화) Edit뿐 아니라 Combo/Calendar도 .value로 동일하게 동작하는지 확인
+	this.gfn_alert("과제: gfn_validate를 완성해 보세요.");
+	return false;
+};

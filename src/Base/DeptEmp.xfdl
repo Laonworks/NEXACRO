@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="DeptEmp" width="1280" height="720" titletext="HR Admin - 부서별 사원 현황" onload="DeptEmp_onload">
+    <Objects>
+      <Dataset id="dsDept" onrowposchanged="dsDept_onrowposchanged">
+        <ColumnInfo>
+          <Column id="DEPT_CD" type="STRING" size="10"/>
+          <Column id="DEPT_NM" type="STRING" size="50"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="DEPT_CD">D001</Col><Col id="DEPT_NM">경영지원팀</Col></Row>
+          <Row><Col id="DEPT_CD">D002</Col><Col id="DEPT_NM">인사팀</Col></Row>
+          <Row><Col id="DEPT_CD">D003</Col><Col id="DEPT_NM">개발1팀</Col></Row>
+          <Row><Col id="DEPT_CD">D004</Col><Col id="DEPT_NM">개발2팀</Col></Row>
+          <Row><Col id="DEPT_CD">D005</Col><Col id="DEPT_NM">영업팀</Col></Row>
+          <Row><Col id="DEPT_CD">D006</Col><Col id="DEPT_NM">마케팅팀</Col></Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsEmp">
+        <ColumnInfo>
+          <Column id="EMP_ID" type="STRING" size="10"/>
+          <Column id="EMP_NM" type="STRING" size="50"/>
+          <Column id="DEPT_CD" type="STRING" size="10"/>
+          <Column id="POSITION_CD" type="STRING" size="10"/>
+          <Column id="GENDER_CD" type="STRING" size="1"/>
+          <Column id="HIRE_DT" type="STRING" size="8"/>
+          <Column id="EMAIL" type="STRING" size="100"/>
+          <Column id="PHONE" type="STRING" size="20"/>
+          <Column id="SALARY" type="INT" size="10"/>
+          <Column id="USE_YN" type="STRING" size="1"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="EMP_ID">E1001</Col><Col id="EMP_NM">김민준</Col><Col id="DEPT_CD">D001</Col><Col id="POSITION_CD">P03</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20150302</Col><Col id="EMAIL">mjkim@hradmin.co.kr</Col><Col id="PHONE">010-1234-1001</Col><Col id="SALARY">5200</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1002</Col><Col id="EMP_NM">이서연</Col><Col id="DEPT_CD">D002</Col><Col id="POSITION_CD">P02</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20170710</Col><Col id="EMAIL">sylee@hradmin.co.kr</Col><Col id="PHONE">010-1234-1002</Col><Col id="SALARY">4500</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1003</Col><Col id="EMP_NM">박지훈</Col><Col id="DEPT_CD">D003</Col><Col id="POSITION_CD">P02</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20180115</Col><Col id="EMAIL">jhpark@hradmin.co.kr</Col><Col id="PHONE">010-1234-1003</Col><Col id="SALARY">4800</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1004</Col><Col id="EMP_NM">최수아</Col><Col id="DEPT_CD">D003</Col><Col id="POSITION_CD">P01</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20210906</Col><Col id="EMAIL">sachoi@hradmin.co.kr</Col><Col id="PHONE">010-1234-1004</Col><Col id="SALARY">3600</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1005</Col><Col id="EMP_NM">정도현</Col><Col id="DEPT_CD">D004</Col><Col id="POSITION_CD">P02</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20190401</Col><Col id="EMAIL">dhjung@hradmin.co.kr</Col><Col id="PHONE">010-1234-1005</Col><Col id="SALARY">4300</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1006</Col><Col id="EMP_NM">한예린</Col><Col id="DEPT_CD">D004</Col><Col id="POSITION_CD">P01</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20220214</Col><Col id="EMAIL">yrhan@hradmin.co.kr</Col><Col id="PHONE">010-1234-1006</Col><Col id="SALARY">3400</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1007</Col><Col id="EMP_NM">오준서</Col><Col id="DEPT_CD">D005</Col><Col id="POSITION_CD">P03</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20130520</Col><Col id="EMAIL">jsoh@hradmin.co.kr</Col><Col id="PHONE">010-1234-1007</Col><Col id="SALARY">5500</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1008</Col><Col id="EMP_NM">강하은</Col><Col id="DEPT_CD">D005</Col><Col id="POSITION_CD">P01</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20230102</Col><Col id="EMAIL">hekang@hradmin.co.kr</Col><Col id="PHONE">010-1234-1008</Col><Col id="SALARY">3200</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1009</Col><Col id="EMP_NM">윤시우</Col><Col id="DEPT_CD">D002</Col><Col id="POSITION_CD">P01</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20240318</Col><Col id="EMAIL">swyoon@hradmin.co.kr</Col><Col id="PHONE">010-1234-1009</Col><Col id="SALARY">3100</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1010</Col><Col id="EMP_NM">임채원</Col><Col id="DEPT_CD">D001</Col><Col id="POSITION_CD">P02</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20160822</Col><Col id="EMAIL">cwlim@hradmin.co.kr</Col><Col id="PHONE">010-1234-1010</Col><Col id="SALARY">4700</Col><Col id="USE_YN">N</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsPosition">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="10"/>
+          <Column id="CODE_NM" type="STRING" size="50"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="CODE">P01</Col><Col id="CODE_NM">사원</Col></Row>
+          <Row><Col id="CODE">P02</Col><Col id="CODE_NM">과장</Col></Row>
+          <Row><Col id="CODE">P03</Col><Col id="CODE_NM">부장</Col></Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Layouts>
+      <Layout height="720" mobileorientation="none" width="1280">
+        <Static id="stFormTitle" taborder="0" text="부서별 사원 현황" left="20" top="15" width="250" height="30" font="bold 18px/normal &quot;Malgun Gothic&quot;" verticalAlign="middle"/>
+        <Button id="btnShowAll" taborder="1" text="전체 사원 보기" left="1140" top="15" width="120" height="30" onclick="btnShowAll_onclick"/>
+        <Static id="stDeptTitle" taborder="2" text="부서 (마스터)" left="20" top="55" width="200" height="26" font="bold 14px/normal &quot;Malgun Gothic&quot;" verticalAlign="middle"/>
+        <Grid id="grdDept" taborder="3" left="20" top="85" width="300" height="430" binddataset="dsDept" autofittype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="90"/>
+                <Column size="170"/>
+              </Columns>
+              <Rows>
+                <Row size="32" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="부서코드"/>
+                <Cell col="1" text="부서명"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:DEPT_CD" textAlign="center"/>
+                <Cell col="1" text="bind:DEPT_NM"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="stEmpTitle" taborder="4" text="사원 (디테일)" left="340" top="55" width="200" height="26" font="bold 14px/normal &quot;Malgun Gothic&quot;" verticalAlign="middle"/>
+        <Static id="stEmpCount" taborder="5" text="0명" left="1160" top="55" width="100" height="26" color="#555555" textAlign="right" verticalAlign="middle"/>
+        <Grid id="grdEmp" taborder="6" left="340" top="85" width="920" height="430" binddataset="dsEmp" autofittype="col" oncelldblclick="grdEmp_oncelldblclick">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="90"/>
+                <Column size="80"/>
+                <Column size="100"/>
+                <Column size="200"/>
+                <Column size="130"/>
+                <Column size="80"/>
+              </Columns>
+              <Rows>
+                <Row size="32" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="사번"/>
+                <Cell col="1" text="사원명"/>
+                <Cell col="2" text="직급"/>
+                <Cell col="3" text="입사일"/>
+                <Cell col="4" text="이메일"/>
+                <Cell col="5" text="전화번호"/>
+                <Cell col="6" text="연봉"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:EMP_ID" textAlign="center"/>
+                <Cell col="1" text="bind:EMP_NM" textAlign="center"/>
+                <Cell col="2" text="bind:POSITION_CD" displaytype="combotext" combodataset="dsPosition" combocodecol="CODE" combodatacol="CODE_NM" textAlign="center"/>
+                <Cell col="3" text="bind:HIRE_DT" textAlign="center"/>
+                <Cell col="4" text="bind:EMAIL"/>
+                <Cell col="5" text="bind:PHONE" textAlign="center"/>
+                <Cell col="6" text="bind:SALARY" textAlign="right"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="stHint" taborder="7" text="※ 사원 행을 더블클릭하면 상세 정보가 열립니다." left="340" top="520" width="400" height="24" color="#888888" verticalAlign="middle"/>
+        <Static id="stDetailTitle" taborder="8" text="사원 상세" left="20" top="555" width="200" height="26" font="bold 14px/normal &quot;Malgun Gothic&quot;" verticalAlign="middle" visible="false"/>
+        <Button id="btnCloseDetail" taborder="9" text="닫기" left="1180" top="553" width="80" height="28" onclick="btnCloseDetail_onclick" visible="false"/>
+        <Static id="stDtlEmpId" taborder="10" text="사번" left="20" top="590" width="70" height="30" verticalAlign="middle" visible="false"/>
+        <Edit id="edtEmpId" taborder="11" left="95" top="590" width="150" height="30" readonly="true" visible="false"/>
+        <Static id="stDtlEmpNm" taborder="12" text="사원명" left="270" top="590" width="70" height="30" verticalAlign="middle" visible="false"/>
+        <Edit id="edtEmpNm" taborder="13" left="345" top="590" width="150" height="30" readonly="true" visible="false"/>
+        <Static id="stDtlPosition" taborder="14" text="직급" left="520" top="590" width="70" height="30" verticalAlign="middle" visible="false"/>
+        <Combo id="cboPosition" taborder="15" left="595" top="590" width="150" height="30" innerdataset="dsPosition" codecolumn="CODE" datacolumn="CODE_NM" enable="false" visible="false"/>
+        <Static id="stDtlHireDt" taborder="16" text="입사일" left="770" top="590" width="70" height="30" verticalAlign="middle" visible="false"/>
+        <Edit id="edtHireDt" taborder="17" left="845" top="590" width="150" height="30" readonly="true" visible="false"/>
+        <Static id="stDtlEmail" taborder="18" text="이메일" left="20" top="630" width="70" height="30" verticalAlign="middle" visible="false"/>
+        <Edit id="edtEmail" taborder="19" left="95" top="630" width="400" height="30" readonly="true" visible="false"/>
+        <Static id="stDtlPhone" taborder="20" text="전화번호" left="520" top="630" width="70" height="30" verticalAlign="middle" visible="false"/>
+        <Edit id="edtPhone" taborder="21" left="595" top="630" width="150" height="30" readonly="true" visible="false"/>
+      </Layout>
+    </Layouts>
+    <Bind>
+      <BindItem id="item0" compid="edtEmpId" propid="value" datasetid="dsEmp" columnid="EMP_ID"/>
+      <BindItem id="item1" compid="edtEmpNm" propid="value" datasetid="dsEmp" columnid="EMP_NM"/>
+      <BindItem id="item2" compid="cboPosition" propid="value" datasetid="dsEmp" columnid="POSITION_CD"/>
+      <BindItem id="item3" compid="edtHireDt" propid="value" datasetid="dsEmp" columnid="HIRE_DT"/>
+      <BindItem id="item4" compid="edtEmail" propid="value" datasetid="dsEmp" columnid="EMAIL"/>
+      <BindItem id="item5" compid="edtPhone" propid="value" datasetid="dsEmp" columnid="PHONE"/>
+    </Bind>
+    <Script type="xscript5.1"><![CDATA[
+/*******************************************************************************
+ * 04. 부서-사원 마스터/디테일 (DeptEmp.xfdl)
+ * - 학습 포인트: 두 Dataset의 연동(마스터 행 이동 → 디테일 filter),
+ *   filter 조건식 작성, 더블클릭 이벤트, 상세 영역 show/hide
+ * - 마스터(dsDept)의 rowposition이 바뀔 때마다 디테일(dsEmp)을 filter하는
+ *   구조가 이 화면의 전부입니다. 이벤트 하나로 화면 전체가 연동됩니다.
+ * - 지금은 전체 사원을 메모리에 두고 filter하지만, 5단계에서는
+ *   "부서 선택 시 해당 부서만 서버에 조회"하는 방식과 비교하게 됩니다.
+ ******************************************************************************/
+
+// 상세 영역 컴포넌트 목록 (일괄 show/hide 용)
+var DETAIL_COMPS = ["stDetailTitle", "btnCloseDetail",
+                    "stDtlEmpId", "edtEmpId", "stDtlEmpNm", "edtEmpNm",
+                    "stDtlPosition", "cboPosition", "stDtlHireDt", "edtHireDt",
+                    "stDtlEmail", "edtEmail", "stDtlPhone", "edtPhone"];
+
+// 폼 로드: 첫 부서 기준으로 디테일 필터링
+this.DeptEmp_onload = function(obj, e)
+{
+	this.fnFilterEmp(this.dsDept.rowposition);
+};
+
+// ★ 핵심: 마스터(부서) 행 이동 → 디테일(사원) 필터링
+this.dsDept_onrowposchanged = function(obj, e)
+{
+	this.fnFilterEmp(e.newrow);
+};
+
+// 선택된 부서의 사원만 보이도록 filter 적용
+this.fnFilterEmp = function(nRow)
+{
+	if (nRow < 0) {
+		this.dsEmp.filter("");
+	} else {
+		var sDeptCd = this.dsDept.getColumn(nRow, "DEPT_CD");
+		// filter 조건식은 문자열 — 컬럼 비교값은 따옴표로 감싸야 함
+		this.dsEmp.filter("DEPT_CD == '" + sDeptCd + "'");
+	}
+	this.fnDisplayCount();
+};
+
+// 전체 사원 보기: 필터 해제
+this.btnShowAll_onclick = function(obj, e)
+{
+	this.dsEmp.filter("");
+	this.fnDisplayCount();
+};
+
+// 사원 더블클릭 → 상세 영역 열기 (값 표시는 bind item이 자동 처리)
+this.grdEmp_oncelldblclick = function(obj, e)
+{
+	this.fnShowDetail(true);
+};
+
+this.btnCloseDetail_onclick = function(obj, e)
+{
+	this.fnShowDetail(false);
+};
+
+// 상세 영역 일괄 show/hide
+this.fnShowDetail = function(bShow)
+{
+	for (var i = 0; i < DETAIL_COMPS.length; i++) {
+		this[DETAIL_COMPS[i]].set_visible(bShow);
+	}
+};
+
+// 사원 수 표시 — filter 상태에서 getRowCount()는 보이는 행 수만 반환 (2단계 복습)
+this.fnDisplayCount = function()
+{
+	this.stEmpCount.set_text(this.dsEmp.getRowCount() + "명");
+};
+
+/*******************************************************************************
+ * [과제 힌트] 부서 Grid에 "사원수" 컬럼 추가 (expr 수식 컬럼)
+ * 1) grdDept에 컬럼을 하나 추가하고 body 셀에 아래와 같이 expr을 지정:
+ *    text='expr:dataset.parent.dsEmp.getCaseCount("DEPT_CD == \"" + DEPT_CD + "\"")'
+ *    - expr 안에서 DEPT_CD는 "그 행의" 부서코드를 의미
+ *    - dataset.parent로 폼에 접근해 다른 Dataset(dsEmp)을 참조
+ * 2) 실행 후 관찰: 부서를 클릭하면(=dsEmp가 filter되면) 사원수가 변합니다!
+ *    getCaseCount는 "보이는 행"만 세기 때문입니다.
+ * 3) 토론: 이 문제를 어떻게 해결할까?
+ *    - 화면표시용/원본 Dataset 분리(copyData) 또는
+ *    - filter 대신 "부서 선택 시 서버 재조회" (5단계에서 다룰 전략)
+ ******************************************************************************/
+]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  [11차시] CRUD 패턴 완성 — 변경분만 서버 전송
+  학습 포인트
+   1. SI 표준 패턴: 조회 → Grid 에서 편집(추가/수정/삭제) → 저장 한 번에 반영
+   2. deleteRow 는 "화면에서만" 지우고 Dataset 이 삭제분을 기억한다
+      → 저장 시 rowtype(insert/update/delete)별로 서버가 처리
+   3. 저장 성공 후 재조회로 화면 동기화 (서버 채번된 사번 받아오기)
+  사전 준비: mock_server 실행 (node server.js)
+-->
+<FDL version="2.1">
+  <Form id="EmpCrud" width="900" height="600" titletext="사원 CRUD" onload="EmpCrud_onload">
+    <Objects>
+      <Dataset id="ds_emp"/>
+      <Dataset id="ds_dept"/>
+    </Objects>
+    <Layouts>
+      <Layout height="600" width="900">
+        <Button id="btn_search" taborder="0" text="조회"     left="20"  top="20" width="80" height="30" onclick="btn_search_onclick"/>
+        <Button id="btn_add"    taborder="1" text="행 추가"  left="110" top="20" width="80" height="30" onclick="btn_add_onclick"/>
+        <Button id="btn_del"    taborder="2" text="행 삭제"  left="200" top="20" width="80" height="30" onclick="btn_del_onclick"/>
+        <Button id="btn_save"   taborder="3" text="저장"     top="20" right="20" width="80" height="30" onclick="btn_save_onclick"/>
+
+        <Grid id="grd_emp" taborder="4" left="20" top="60" right="20" bottom="60" binddataset="ds_emp">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="50"/><Column size="80"/><Column size="110"/>
+                <Column size="130"/><Column size="110"/><Column size="180"/>
+              </Columns>
+              <Rows><Row size="28" band="head"/><Row size="26" band="body"/></Rows>
+              <Band id="head">
+                <Cell text="상태"/><Cell col="1" text="사번"/><Cell col="2" text="이름"/>
+                <Cell col="3" text="부서"/><Cell col="4" text="연봉"/><Cell col="5" text="이메일"/>
+              </Band>
+              <Band id="body">
+                <Cell expr="dataset.getRowType(currow)==2 ? 'N' : dataset.getRowType(currow)==4 ? 'U' : ''" style="color:#cc3300;" textAlign="center"/>
+                <Cell col="1" text="bind:EMP_ID"/>
+                <Cell col="2" text="bind:EMP_NM" edittype="normal"/>
+                <Cell col="3" text="bind:DEPT_CD" displaytype="combocontrol" edittype="combo"
+                      combodataset="ds_dept" combocodecol="CODE" combodatacol="NAME"/>
+                <Cell col="4" text="bind:SALARY" displaytype="numbercontrol" edittype="masknumber" mask="#,##0" textAlign="right"/>
+                <Cell col="5" text="bind:EMAIL" edittype="normal"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="sta_status" taborder="5" text="" left="20" bottom="20" right="20" height="28" style="color:#1f4e79;"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+this.EmpCrud_onload = function(obj:nexacro.Form, e:nexacro.LoadEventInfo)
+{
+	this.transaction("svcDeptList", "svc::dept/list.do", "", "ds_dept=ds_dept", "", "fn_callback");
+	this.fn_search();
+};
+
+this.btn_search_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	// 저장 안 한 변경이 있으면 경고 — 실무 필수 체크
+	if (this.fn_hasChanges()) {
+		if (!confirm("저장하지 않은 변경 내역이 있습니다. 무시하고 다시 조회할까요?")) return;
+	}
+	this.fn_search();
+};
+
+this.fn_search = function()
+{
+	this.transaction("svcEmpList", "svc::emp/list.do", "", "ds_emp=ds_out", "", "fn_callback");
+};
+
+this.btn_add_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	var nRow = this.ds_emp.addRow();
+	// 사번은 서버가 채번하므로 비워둔다
+	this.ds_emp.setColumn(nRow, "DEPT_CD", "D01");
+	this.ds_emp.setColumn(nRow, "SALARY", 0);
+	this.grd_emp.setCellPos(2);
+	this.grd_emp.setFocus();
+	this.grd_emp.showEditor(true);
+};
+
+this.btn_del_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	var nRow = this.ds_emp.rowposition;
+	if (nRow < 0) { alert("삭제할 행을 선택하세요."); return; }
+	// 화면에서는 사라지지만 Dataset 은 삭제분을 기억 → 저장 시 함께 전송됨
+	this.ds_emp.deleteRow(nRow);
+	this.fn_showChanges();
+};
+
+/* ── 저장: 변경분(추가/수정/삭제)만 모아 서버로 ──
+   updatecontrol=true(기본값) 상태의 Dataset 을 입력DS 로 지정하면
+   넥사크로가 rowtype 과 원본값(OrgRow)을 포함해 직렬화한다.
+   입력DS 표기 "ds_save=ds_emp:U" 의 ":U" = Updated rows only      */
+this.btn_save_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	if (!this.fn_hasChanges()) { alert("변경된 내용이 없습니다."); return; }
+
+	// 저장 전 검증: 추가/수정된 행의 필수값 체크
+	for (var i = 0; i < this.ds_emp.getRowCount(); i++) {
+		var t = this.ds_emp.getRowType(i);
+		if (t == nexacro.Dataset.ROWTYPE_INSERT || t == nexacro.Dataset.ROWTYPE_UPDATE) {
+			if (!this.ds_emp.getColumn(i, "EMP_NM")) {
+				alert((i + 1) + "번째 행: 이름은 필수입니다.");
+				this.ds_emp.set_rowposition(i);
+				return;
+			}
+		}
+	}
+
+	this.transaction("svcEmpSave",
+	                 "svc::emp/save.do",
+	                 "ds_save=ds_emp:U",   // :U = 변경분만 전송
+	                 "",
+	                 "",
+	                 "fn_callback");
+};
+
+this.fn_callback = function(svcID, errorCode, errorMsg)
+{
+	if (errorCode < 0) {
+		alert("통신 오류 [" + svcID + "]\n" + errorMsg);
+		return;
+	}
+
+	if (svcID == "svcEmpList") {
+		this.sta_status.set_text("조회 완료: " + this.ds_emp.getRowCount() + "건");
+	}
+	else if (svcID == "svcEmpSave") {
+		alert(errorMsg);     // "저장 완료 (추가 n / 수정 n / 삭제 n)"
+		this.fn_search();    // 재조회 → 서버 채번 사번 반영 + rowtype 초기화
+	}
+};
+
+/* 변경 여부 체크 유틸 */
+this.fn_hasChanges = function()
+{
+	if (this.ds_emp.getDeletedRowCount() > 0) return true;
+	for (var i = 0; i < this.ds_emp.getRowCount(); i++) {
+		var t = this.ds_emp.getRowType(i);
+		if (t == nexacro.Dataset.ROWTYPE_INSERT || t == nexacro.Dataset.ROWTYPE_UPDATE) return true;
+	}
+	return false;
+};
+
+this.fn_showChanges = function()
+{
+	this.sta_status.set_text("미저장 변경: 삭제 " + this.ds_emp.getDeletedRowCount() + "건 포함 — [저장]을 눌러 반영하세요");
+};
+]]></Script>
+  </Form>
+</FDL>

@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  [7차시] Dataset 이해 (★ 과정 전체의 핵심)
+  학습 포인트
+   1. Dataset = 메모리상의 2차원 테이블 (rowposition = 현재 선택된 행)
+   2. 행 조작: addRow / deleteRow / setColumn / getColumn
+   3. 행 개수 getRowCount(), 탐색 for 루프, findRow 검색
+   4. Dataset 이벤트: onrowposchanged — "데이터가 움직이면 화면이 반응한다"
+  ※ 이 예제는 화면 컴포넌트 없이 Dataset 만으로 데이터를 다뤄본다.
+     (8차시에서 같은 데이터를 Grid/바인딩으로 보여준다)
+-->
+<FDL version="2.1">
+  <Form id="DatasetBasic" width="800" height="600" titletext="Dataset 기초" onload="DatasetBasic_onload">
+    <Objects>
+      <Dataset id="ds_emp" onrowposchanged="ds_emp_onrowposchanged">
+        <ColumnInfo>
+          <Column id="EMP_ID"   type="STRING" size="10"/>
+          <Column id="EMP_NM"   type="STRING" size="30"/>
+          <Column id="DEPT_CD"  type="STRING" size="10"/>
+          <Column id="SALARY"   type="INT"/>
+          <Column id="HIRE_DT"  type="STRING" size="8"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="EMP_ID">E001</Col><Col id="EMP_NM">김철수</Col><Col id="DEPT_CD">D01</Col><Col id="SALARY">3500</Col><Col id="HIRE_DT">20200301</Col></Row>
+          <Row><Col id="EMP_ID">E002</Col><Col id="EMP_NM">이영희</Col><Col id="DEPT_CD">D02</Col><Col id="SALARY">4200</Col><Col id="HIRE_DT">20180715</Col></Row>
+          <Row><Col id="EMP_ID">E003</Col><Col id="EMP_NM">박민준</Col><Col id="DEPT_CD">D01</Col><Col id="SALARY">2900</Col><Col id="HIRE_DT">20220502</Col></Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Layouts>
+      <Layout height="600" width="800">
+        <Button id="btn_add"    taborder="0" text="행 추가"      left="20"  top="20" width="100" height="32" onclick="btn_add_onclick"/>
+        <Button id="btn_update" taborder="1" text="현재행 수정"  left="130" top="20" width="100" height="32" onclick="btn_update_onclick"/>
+        <Button id="btn_delete" taborder="2" text="현재행 삭제"  left="240" top="20" width="100" height="32" onclick="btn_delete_onclick"/>
+        <Button id="btn_find"   taborder="3" text="검색(findRow)" left="350" top="20" width="110" height="32" onclick="btn_find_onclick"/>
+        <Button id="btn_print"  taborder="4" text="전체 출력"    left="470" top="20" width="100" height="32" onclick="btn_print_onclick"/>
+        <TextArea id="txa_log" taborder="5" left="20" top="70" right="20" bottom="20" readonly="true"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+this.DatasetBasic_onload = function(obj:nexacro.Form, e:nexacro.LoadEventInfo)
+{
+	this.fn_log("초기 데이터 " + this.ds_emp.getRowCount() + "건 로드됨");
+};
+
+/* ── 행 추가: addRow() 는 새 행의 인덱스를 돌려주고, rowposition 도 그 행으로 이동 ── */
+this.btn_add_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	var nRow = this.ds_emp.addRow();
+	this.ds_emp.setColumn(nRow, "EMP_ID",  "E00" + (nRow + 1));
+	this.ds_emp.setColumn(nRow, "EMP_NM",  "신규사원");
+	this.ds_emp.setColumn(nRow, "DEPT_CD", "D03");
+	this.ds_emp.setColumn(nRow, "SALARY",  2500);
+	this.fn_log("행 추가 → index " + nRow + ", 총 " + this.ds_emp.getRowCount() + "건");
+};
+
+/* ── 현재행 수정: rowposition 이 가리키는 행을 바꾼다 ── */
+this.btn_update_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	var nRow = this.ds_emp.rowposition;
+	if (nRow < 0) { alert("선택된 행이 없습니다."); return; }
+
+	var oldSalary = this.ds_emp.getColumn(nRow, "SALARY");
+	this.ds_emp.setColumn(nRow, "SALARY", Number(oldSalary) + 100);   // 연봉 100 인상
+	this.fn_log(this.ds_emp.getColumn(nRow, "EMP_NM") + " 연봉 " + oldSalary + " → " + this.ds_emp.getColumn(nRow, "SALARY"));
+};
+
+/* ── 현재행 삭제 ── */
+this.btn_delete_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	var nRow = this.ds_emp.rowposition;
+	if (nRow < 0) { alert("삭제할 행이 없습니다."); return; }
+
+	var name = this.ds_emp.getColumn(nRow, "EMP_NM");
+	this.ds_emp.deleteRow(nRow);
+	this.fn_log(name + " 삭제됨, 남은 행 " + this.ds_emp.getRowCount() + "건");
+};
+
+/* ── findRow: 조건에 맞는 첫 행의 인덱스 (없으면 -1) ── */
+this.btn_find_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	var nRow = this.ds_emp.findRow("DEPT_CD", "D01");
+	if (nRow < 0) {
+		this.fn_log("개발팀(D01) 사원이 없습니다.");
+		return;
+	}
+	this.ds_emp.set_rowposition(nRow);   // 검색된 행으로 이동 → onrowposchanged 발생!
+	this.fn_log("개발팀 첫 번째 사원 : " + this.ds_emp.getColumn(nRow, "EMP_NM") + " (index " + nRow + ")");
+};
+
+/* ── 전체 행 순회 — 합계 계산 패턴 ── */
+this.btn_print_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	var msg = "사번 | 이름 | 부서 | 연봉\n--------------------------\n";
+	var total = 0;
+	for (var i = 0; i < this.ds_emp.getRowCount(); i++) {
+		msg += this.ds_emp.getColumn(i, "EMP_ID") + " | "
+		     + this.ds_emp.getColumn(i, "EMP_NM") + " | "
+		     + this.ds_emp.getColumn(i, "DEPT_CD") + " | "
+		     + this.ds_emp.getColumn(i, "SALARY") + "\n";
+		total += Number(this.ds_emp.getColumn(i, "SALARY"));
+	}
+	msg += "--------------------------\n연봉 합계 : " + total;
+	// 참고: 같은 결과를 this.ds_emp.getSum("SALARY") 한 줄로도 구할 수 있다
+	this.fn_log(msg);
+};
+
+/* ── Dataset 이벤트: 행 위치가 바뀔 때마다 자동 호출 ──
+   8차시 바인딩의 원리가 바로 이 이벤트다. (행 이동 → 화면 갱신) */
+this.ds_emp_onrowposchanged = function(obj:nexacro.Dataset, e:nexacro.DSRowPosChangeEventInfo)
+{
+	trace("rowposition 변경 : " + e.oldrow + " → " + e.newrow);
+};
+
+/* 로그 유틸 */
+this.fn_log = function(msg)
+{
+	this.txa_log.set_value((this.txa_log.value || "") + msg + "\n\n");
+};
+]]></Script>
+  </Form>
+</FDL>

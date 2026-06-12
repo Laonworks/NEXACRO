@@ -1,0 +1,344 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="EmpEdit" width="1280" height="720" titletext="HR Admin - 사원 등록/수정" onload="EmpEdit_onload">
+    <Objects>
+      <Dataset id="dsEmp" onrowposchanged="dsEmp_onrowposchanged" oncolumnchanged="dsEmp_oncolumnchanged">
+        <ColumnInfo>
+          <Column id="EMP_ID" type="STRING" size="10"/>
+          <Column id="EMP_NM" type="STRING" size="50"/>
+          <Column id="DEPT_CD" type="STRING" size="10"/>
+          <Column id="POSITION_CD" type="STRING" size="10"/>
+          <Column id="GENDER_CD" type="STRING" size="1"/>
+          <Column id="HIRE_DT" type="STRING" size="8"/>
+          <Column id="EMAIL" type="STRING" size="100"/>
+          <Column id="PHONE" type="STRING" size="20"/>
+          <Column id="SALARY" type="INT" size="10"/>
+          <Column id="USE_YN" type="STRING" size="1"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="EMP_ID">E1001</Col><Col id="EMP_NM">김민준</Col><Col id="DEPT_CD">D001</Col><Col id="POSITION_CD">P03</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20150302</Col><Col id="EMAIL">mjkim@hradmin.co.kr</Col><Col id="PHONE">010-1234-1001</Col><Col id="SALARY">5200</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1002</Col><Col id="EMP_NM">이서연</Col><Col id="DEPT_CD">D002</Col><Col id="POSITION_CD">P02</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20170710</Col><Col id="EMAIL">sylee@hradmin.co.kr</Col><Col id="PHONE">010-1234-1002</Col><Col id="SALARY">4500</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1003</Col><Col id="EMP_NM">박지훈</Col><Col id="DEPT_CD">D003</Col><Col id="POSITION_CD">P02</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20180115</Col><Col id="EMAIL">jhpark@hradmin.co.kr</Col><Col id="PHONE">010-1234-1003</Col><Col id="SALARY">4800</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1004</Col><Col id="EMP_NM">최수아</Col><Col id="DEPT_CD">D003</Col><Col id="POSITION_CD">P01</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20210906</Col><Col id="EMAIL">sachoi@hradmin.co.kr</Col><Col id="PHONE">010-1234-1004</Col><Col id="SALARY">3600</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1005</Col><Col id="EMP_NM">정도현</Col><Col id="DEPT_CD">D004</Col><Col id="POSITION_CD">P02</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20190401</Col><Col id="EMAIL">dhjung@hradmin.co.kr</Col><Col id="PHONE">010-1234-1005</Col><Col id="SALARY">4300</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1006</Col><Col id="EMP_NM">한예린</Col><Col id="DEPT_CD">D004</Col><Col id="POSITION_CD">P01</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20220214</Col><Col id="EMAIL">yrhan@hradmin.co.kr</Col><Col id="PHONE">010-1234-1006</Col><Col id="SALARY">3400</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1007</Col><Col id="EMP_NM">오준서</Col><Col id="DEPT_CD">D005</Col><Col id="POSITION_CD">P03</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20130520</Col><Col id="EMAIL">jsoh@hradmin.co.kr</Col><Col id="PHONE">010-1234-1007</Col><Col id="SALARY">5500</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1008</Col><Col id="EMP_NM">강하은</Col><Col id="DEPT_CD">D005</Col><Col id="POSITION_CD">P01</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20230102</Col><Col id="EMAIL">hekang@hradmin.co.kr</Col><Col id="PHONE">010-1234-1008</Col><Col id="SALARY">3200</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1009</Col><Col id="EMP_NM">윤시우</Col><Col id="DEPT_CD">D002</Col><Col id="POSITION_CD">P01</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20240318</Col><Col id="EMAIL">swyoon@hradmin.co.kr</Col><Col id="PHONE">010-1234-1009</Col><Col id="SALARY">3100</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1010</Col><Col id="EMP_NM">임채원</Col><Col id="DEPT_CD">D001</Col><Col id="POSITION_CD">P02</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20160822</Col><Col id="EMAIL">cwlim@hradmin.co.kr</Col><Col id="PHONE">010-1234-1010</Col><Col id="SALARY">4700</Col><Col id="USE_YN">N</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsDept">
+        <ColumnInfo>
+          <Column id="DEPT_CD" type="STRING" size="10"/>
+          <Column id="DEPT_NM" type="STRING" size="50"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="DEPT_CD">D001</Col><Col id="DEPT_NM">경영지원팀</Col></Row>
+          <Row><Col id="DEPT_CD">D002</Col><Col id="DEPT_NM">인사팀</Col></Row>
+          <Row><Col id="DEPT_CD">D003</Col><Col id="DEPT_NM">개발1팀</Col></Row>
+          <Row><Col id="DEPT_CD">D004</Col><Col id="DEPT_NM">개발2팀</Col></Row>
+          <Row><Col id="DEPT_CD">D005</Col><Col id="DEPT_NM">영업팀</Col></Row>
+          <Row><Col id="DEPT_CD">D006</Col><Col id="DEPT_NM">마케팅팀</Col></Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsPosition">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="10"/>
+          <Column id="CODE_NM" type="STRING" size="50"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="CODE">P01</Col><Col id="CODE_NM">사원</Col></Row>
+          <Row><Col id="CODE">P02</Col><Col id="CODE_NM">과장</Col></Row>
+          <Row><Col id="CODE">P03</Col><Col id="CODE_NM">부장</Col></Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsGender">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="1"/>
+          <Column id="CODE_NM" type="STRING" size="10"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="CODE">M</Col><Col id="CODE_NM">남</Col></Row>
+          <Row><Col id="CODE">F</Col><Col id="CODE_NM">여</Col></Row>
+        </Rows>
+      </Dataset>
+      <Dataset id="dsUseYn">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="1"/>
+          <Column id="CODE_NM" type="STRING" size="10"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="CODE">Y</Col><Col id="CODE_NM">재직</Col></Row>
+          <Row><Col id="CODE">N</Col><Col id="CODE_NM">퇴직</Col></Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Layouts>
+      <Layout height="720" mobileorientation="none" width="1280">
+        <Static id="stFormTitle" taborder="0" text="사원 등록/수정" left="20" top="15" width="250" height="30" font="bold 18px/normal &quot;Malgun Gothic&quot;" verticalAlign="middle"/>
+        <Button id="btnAdd" taborder="1" text="신규" left="880" top="15" width="90" height="30" onclick="btnAdd_onclick"/>
+        <Button id="btnDelete" taborder="2" text="삭제" left="980" top="15" width="90" height="30" onclick="btnDelete_onclick"/>
+        <Button id="btnCancel" taborder="3" text="변경취소" left="1080" top="15" width="90" height="30" onclick="btnCancel_onclick"/>
+        <Button id="btnSave" taborder="4" text="저장" left="1180" top="15" width="80" height="30" onclick="btnSave_onclick"/>
+        <Grid id="grdEmp" taborder="5" left="20" top="55" width="560" height="600" binddataset="dsEmp" autofittype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="90"/>
+                <Column size="100"/>
+                <Column size="140"/>
+                <Column size="100"/>
+                <Column size="70"/>
+              </Columns>
+              <Rows>
+                <Row size="32" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="사번"/>
+                <Cell col="1" text="사원명"/>
+                <Cell col="2" text="부서"/>
+                <Cell col="3" text="직급"/>
+                <Cell col="4" text="재직"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:EMP_ID" textAlign="center"/>
+                <Cell col="1" text="bind:EMP_NM" textAlign="center"/>
+                <Cell col="2" text="bind:DEPT_CD" displaytype="combotext" combodataset="dsDept" combocodecol="DEPT_CD" combodatacol="DEPT_NM" textAlign="center"/>
+                <Cell col="3" text="bind:POSITION_CD" displaytype="combotext" combodataset="dsPosition" combocodecol="CODE" combodatacol="CODE_NM" textAlign="center"/>
+                <Cell col="4" text="bind:USE_YN" displaytype="combotext" combodataset="dsUseYn" combocodecol="CODE" combodatacol="CODE_NM" textAlign="center"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="stEditTitle" taborder="6" text="사원 정보" left="620" top="55" width="200" height="28" font="bold 14px/normal &quot;Malgun Gothic&quot;" verticalAlign="middle"/>
+        <Static id="stEmpId" taborder="7" text="사번 *" left="620" top="100" width="90" height="32" verticalAlign="middle"/>
+        <Edit id="edtEmpId" taborder="8" left="720" top="100" width="200" height="32" maxlength="10"/>
+        <Static id="stEmpNm" taborder="9" text="사원명 *" left="620" top="145" width="90" height="32" verticalAlign="middle"/>
+        <Edit id="edtEmpNm" taborder="10" left="720" top="145" width="200" height="32" maxlength="50"/>
+        <Static id="stDept" taborder="11" text="부서 *" left="620" top="190" width="90" height="32" verticalAlign="middle"/>
+        <Combo id="cboDept" taborder="12" left="720" top="190" width="200" height="32" innerdataset="dsDept" codecolumn="DEPT_CD" datacolumn="DEPT_NM" displaynulltext="선택하세요"/>
+        <Static id="stPosition" taborder="13" text="직급 *" left="620" top="235" width="90" height="32" verticalAlign="middle"/>
+        <Combo id="cboPosition" taborder="14" left="720" top="235" width="200" height="32" innerdataset="dsPosition" codecolumn="CODE" datacolumn="CODE_NM" displaynulltext="선택하세요"/>
+        <Static id="stGender" taborder="15" text="성별" left="620" top="280" width="90" height="32" verticalAlign="middle"/>
+        <Combo id="cboGender" taborder="16" left="720" top="280" width="200" height="32" innerdataset="dsGender" codecolumn="CODE" datacolumn="CODE_NM" displaynulltext="선택하세요"/>
+        <Static id="stHireDt" taborder="17" text="입사일 *" left="620" top="325" width="90" height="32" verticalAlign="middle"/>
+        <Calendar id="calHireDt" taborder="18" left="720" top="325" width="200" height="32" dateformat="yyyy-MM-dd"/>
+        <Static id="stEmail" taborder="19" text="이메일" left="620" top="370" width="90" height="32" verticalAlign="middle"/>
+        <Edit id="edtEmail" taborder="20" left="720" top="370" width="320" height="32" maxlength="100"/>
+        <Static id="stPhone" taborder="21" text="전화번호" left="620" top="415" width="90" height="32" verticalAlign="middle"/>
+        <MaskEdit id="mskPhone" taborder="22" left="720" top="415" width="200" height="32" type="string" mask="###-####-####"/>
+        <Static id="stSalary" taborder="23" text="연봉(만원)" left="620" top="460" width="90" height="32" verticalAlign="middle"/>
+        <Edit id="edtSalary" taborder="24" left="720" top="460" width="200" height="32" inputtype="number" maxlength="10"/>
+        <Static id="stUseYn" taborder="25" text="재직여부" left="620" top="505" width="90" height="32" verticalAlign="middle"/>
+        <Combo id="cboUseYn" taborder="26" left="720" top="505" width="200" height="32" innerdataset="dsUseYn" codecolumn="CODE" datacolumn="CODE_NM"/>
+        <Static id="stStatus" taborder="27" text="현재 행 상태: -" left="620" top="570" width="300" height="26" color="#555555" verticalAlign="middle"/>
+        <Static id="stChanges" taborder="28" text="변경 내역: 없음" left="620" top="600" width="400" height="26" color="#555555" verticalAlign="middle"/>
+      </Layout>
+    </Layouts>
+    <Bind>
+      <BindItem id="item0" compid="edtEmpId" propid="value" datasetid="dsEmp" columnid="EMP_ID"/>
+      <BindItem id="item1" compid="edtEmpNm" propid="value" datasetid="dsEmp" columnid="EMP_NM"/>
+      <BindItem id="item2" compid="cboDept" propid="value" datasetid="dsEmp" columnid="DEPT_CD"/>
+      <BindItem id="item3" compid="cboPosition" propid="value" datasetid="dsEmp" columnid="POSITION_CD"/>
+      <BindItem id="item4" compid="cboGender" propid="value" datasetid="dsEmp" columnid="GENDER_CD"/>
+      <BindItem id="item5" compid="calHireDt" propid="value" datasetid="dsEmp" columnid="HIRE_DT"/>
+      <BindItem id="item6" compid="edtEmail" propid="value" datasetid="dsEmp" columnid="EMAIL"/>
+      <BindItem id="item7" compid="mskPhone" propid="value" datasetid="dsEmp" columnid="PHONE"/>
+      <BindItem id="item8" compid="edtSalary" propid="value" datasetid="dsEmp" columnid="SALARY"/>
+      <BindItem id="item9" compid="cboUseYn" propid="value" datasetid="dsEmp" columnid="USE_YN"/>
+    </Bind>
+    <Script type="xscript5.1"><![CDATA[
+/*******************************************************************************
+ * 03. 사원 등록/수정 (EmpEdit.xfdl)
+ * - 학습 포인트: bind item(컴포넌트 ↔ Dataset 양방향 바인딩),
+ *   Combo innerdataset(코드 콤보), Calendar/MaskEdit,
+ *   addRow/deleteRow, getRowType(행 상태), reset(변경 취소), 입력 검증
+ * - 2단계와 비교: 상세 영역에 getColumn 복사 코드가 없습니다!
+ *   bind item 덕분에 행 이동/입력이 모두 자동으로 동기화됩니다.
+ * - 저장은 아직 로컬 Dataset 반영까지만 — 5단계에서 transaction으로 교체합니다.
+ ******************************************************************************/
+
+this.EmpEdit_onload = function(obj, e)
+{
+	this.fnDisplayStatus();
+};
+
+// 행 이동 시 상태 표시 갱신 (입력 컴포넌트 값은 bind item이 자동 갱신!)
+this.dsEmp_onrowposchanged = function(obj, e)
+{
+	this.fnDisplayStatus();
+};
+
+// 컬럼 값 변경 시(입력) 상태 표시 갱신 — 일반 행이 '수정' 상태로 바뀌는 순간 확인
+this.dsEmp_oncolumnchanged = function(obj, e)
+{
+	this.fnDisplayStatus();
+};
+
+// 신규 버튼: 행 추가 + 기본값 + 포커스
+this.btnAdd_onclick = function(obj, e)
+{
+	var nRow = this.dsEmp.addRow();             // 마지막에 행 추가, rowposition 자동 이동
+	this.dsEmp.setColumn(nRow, "USE_YN", "Y");  // 기본값
+	this.edtEmpId.setFocus();
+};
+
+// 삭제 버튼 (★ 과제 — 아래 힌트를 참고해 직접 구현해 보세요)
+this.btnDelete_onclick = function(obj, e)
+{
+	// [과제 힌트]
+	// 1) var nRow = this.dsEmp.rowposition;  행이 없으면(nRow < 0) 안내 후 return
+	// 2) this.confirm(this.dsEmp.getColumn(nRow, "EMP_NM") + " 사원을 삭제하시겠습니까?")
+	//    가 true일 때만 this.dsEmp.deleteRow(nRow);
+	// 3) this.fnDisplayStatus(); 호출
+	// 심화) 신규(미저장) 행을 삭제하면 변경 내역에서 어떻게 처리되는지 관찰해 보세요.
+	this.alert("과제: confirm + deleteRow()로 삭제를 구현해 보세요.");
+};
+
+// 변경취소 버튼: Dataset을 마지막 저장 시점으로 되돌리기
+this.btnCancel_onclick = function(obj, e)
+{
+	if (this.confirm("저장하지 않은 변경 내용을 모두 취소하시겠습니까?")) {
+		this.dsEmp.reset();
+		this.fnDisplayStatus();
+	}
+};
+
+// 저장 버튼: 검증 → (로컬) 저장 확정
+this.btnSave_onclick = function(obj, e)
+{
+	if (!this.fnValidate()) {
+		return;
+	}
+
+	var nInsert = 0;
+	var nUpdate = 0;
+	for (var i = 0; i < this.dsEmp.getRowCount(); i++) {
+		var nType = this.dsEmp.getRowType(i);
+		if (nType == Dataset.ROWTYPE_INSERT) nInsert++;
+		else if (nType == Dataset.ROWTYPE_UPDATE) nUpdate++;
+	}
+	var nDelete = this.dsEmp.getDeletedRowCount();
+
+	if (nInsert + nUpdate + nDelete == 0) {
+		this.alert("변경된 내용이 없습니다.");
+		return;
+	}
+
+	// TODO(5단계): 여기서 transaction()으로 서버에 저장 요청
+	this.alert("저장 완료!\n신규 " + nInsert + "건, 수정 " + nUpdate + "건, 삭제 " + nDelete + "건");
+	this.dsEmp.applyChange();   // 변경 확정 → 모든 행이 일반(NORMAL) 상태로
+	this.fnDisplayStatus();
+};
+
+// 입력 검증: 변경(신규/수정)된 행만 검사
+this.fnValidate = function()
+{
+	for (var i = 0; i < this.dsEmp.getRowCount(); i++) {
+		var nType = this.dsEmp.getRowType(i);
+		if (nType != Dataset.ROWTYPE_INSERT && nType != Dataset.ROWTYPE_UPDATE) {
+			continue;
+		}
+
+		// 필수값 검증 (문제 행으로 이동시켜 사용자가 바로 고칠 수 있게)
+		if (this.fnIsNull(this.dsEmp.getColumn(i, "EMP_ID"))) {
+			return this.fnInvalid(i, "사번은 필수입니다.", this.edtEmpId);
+		}
+		if (this.fnIsNull(this.dsEmp.getColumn(i, "EMP_NM"))) {
+			return this.fnInvalid(i, "사원명은 필수입니다.", this.edtEmpNm);
+		}
+		if (this.fnIsNull(this.dsEmp.getColumn(i, "DEPT_CD"))) {
+			return this.fnInvalid(i, "부서를 선택하세요.", this.cboDept);
+		}
+		if (this.fnIsNull(this.dsEmp.getColumn(i, "POSITION_CD"))) {
+			return this.fnInvalid(i, "직급을 선택하세요.", this.cboPosition);
+		}
+		if (this.fnIsNull(this.dsEmp.getColumn(i, "HIRE_DT"))) {
+			return this.fnInvalid(i, "입사일은 필수입니다.", this.calHireDt);
+		}
+
+		// 형식 검증: 이메일
+		var sEmail = this.dsEmp.getColumn(i, "EMAIL");
+		if (!this.fnIsNull(sEmail) && !/^[\w.+-]+@[\w-]+\.[\w.]+$/.test(sEmail)) {
+			return this.fnInvalid(i, "이메일 형식이 올바르지 않습니다.", this.edtEmail);
+		}
+
+		// 사번 중복 검증 (자기 자신 제외)
+		var sEmpId = this.dsEmp.getColumn(i, "EMP_ID");
+		for (var j = 0; j < this.dsEmp.getRowCount(); j++) {
+			if (j != i && this.dsEmp.getColumn(j, "EMP_ID") == sEmpId) {
+				return this.fnInvalid(i, "이미 존재하는 사번입니다: " + sEmpId, this.edtEmpId);
+			}
+		}
+	}
+	return true;
+};
+
+// 검증 실패 처리: 해당 행으로 이동 + 메시지 + 포커스
+this.fnInvalid = function(nRow, sMsg, objComp)
+{
+	this.dsEmp.set_rowposition(nRow);
+	this.alert(sMsg);
+	objComp.setFocus();
+	return false;
+};
+
+// 현재 행 상태 + 전체 변경 내역 표시
+this.fnDisplayStatus = function()
+{
+	var nRow = this.dsEmp.rowposition;
+	var sStatus = "-";
+	if (nRow >= 0) {
+		switch (this.dsEmp.getRowType(nRow)) {
+			case Dataset.ROWTYPE_NORMAL: sStatus = "일반"; break;
+			case Dataset.ROWTYPE_INSERT: sStatus = "신규"; break;
+			case Dataset.ROWTYPE_UPDATE: sStatus = "수정"; break;
+		}
+	}
+	this.stStatus.set_text("현재 행 상태: " + sStatus);
+
+	var nInsert = 0;
+	var nUpdate = 0;
+	for (var i = 0; i < this.dsEmp.getRowCount(); i++) {
+		var nType = this.dsEmp.getRowType(i);
+		if (nType == Dataset.ROWTYPE_INSERT) nInsert++;
+		else if (nType == Dataset.ROWTYPE_UPDATE) nUpdate++;
+	}
+	var nDelete = this.dsEmp.getDeletedRowCount();
+	if (nInsert + nUpdate + nDelete == 0) {
+		this.stChanges.set_text("변경 내역: 없음");
+	} else {
+		this.stChanges.set_text("변경 내역: 신규 " + nInsert + ", 수정 " + nUpdate + ", 삭제 " + nDelete);
+	}
+};
+
+// 빈값 여부 확인 (8단계에서 공통모듈 gfn_isNull로 이동 예정)
+this.fnIsNull = function(sValue)
+{
+	return (sValue == null || sValue == undefined || String(sValue).trim() == "");
+};
+]]></Script>
+  </Form>
+</FDL>

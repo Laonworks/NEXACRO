@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="ErrorCode" type="int">0</Parameter>
+		<Parameter id="ErrorMsg" type="string">SUCCESS</Parameter>
+	</Parameters>
+	<Dataset id="dsEmp">
+		<ColumnInfo>
+			<Column id="EMP_ID" type="STRING" size="10"/>
+			<Column id="EMP_NM" type="STRING" size="50"/>
+			<Column id="DEPT_CD" type="STRING" size="10"/>
+			<Column id="POSITION_CD" type="STRING" size="10"/>
+			<Column id="GENDER_CD" type="STRING" size="1"/>
+			<Column id="HIRE_DT" type="STRING" size="8"/>
+			<Column id="EMAIL" type="STRING" size="100"/>
+			<Column id="PHONE" type="STRING" size="20"/>
+			<Column id="SALARY" type="INT" size="10"/>
+			<Column id="USE_YN" type="STRING" size="1"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="EMP_ID">E1001</Col>
+				<Col id="EMP_NM">김민준</Col>
+				<Col id="DEPT_CD">D001</Col>
+				<Col id="POSITION_CD">P03</Col>
+				<Col id="GENDER_CD">M</Col>
+				<Col id="HIRE_DT">20150302</Col>
+				<Col id="EMAIL">mjkim@hradmin.co.kr</Col>
+				<Col id="PHONE">010-1234-1001</Col>
+				<Col id="SALARY">5200</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="EMP_ID">E1002</Col>
+				<Col id="EMP_NM">이서연</Col>
+				<Col id="DEPT_CD">D002</Col>
+				<Col id="POSITION_CD">P02</Col>
+				<Col id="GENDER_CD">F</Col>
+				<Col id="HIRE_DT">20170710</Col>
+				<Col id="EMAIL">sylee@hradmin.co.kr</Col>
+				<Col id="PHONE">010-1234-1002</Col>
+				<Col id="SALARY">4500</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="EMP_ID">E1003</Col>
+				<Col id="EMP_NM">박지훈</Col>
+				<Col id="DEPT_CD">D003</Col>
+				<Col id="POSITION_CD">P02</Col>
+				<Col id="GENDER_CD">M</Col>
+				<Col id="HIRE_DT">20180115</Col>
+				<Col id="EMAIL">jhpark@hradmin.co.kr</Col>
+				<Col id="PHONE">010-1234-1003</Col>
+				<Col id="SALARY">4800</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="EMP_ID">E1004</Col>
+				<Col id="EMP_NM">최수아</Col>
+				<Col id="DEPT_CD">D003</Col>
+				<Col id="POSITION_CD">P01</Col>
+				<Col id="GENDER_CD">F</Col>
+				<Col id="HIRE_DT">20210906</Col>
+				<Col id="EMAIL">sachoi@hradmin.co.kr</Col>
+				<Col id="PHONE">010-1234-1004</Col>
+				<Col id="SALARY">3600</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="EMP_ID">E1005</Col>
+				<Col id="EMP_NM">정도현</Col>
+				<Col id="DEPT_CD">D004</Col>
+				<Col id="POSITION_CD">P02</Col>
+				<Col id="GENDER_CD">M</Col>
+				<Col id="HIRE_DT">20190401</Col>
+				<Col id="EMAIL">dhjung@hradmin.co.kr</Col>
+				<Col id="PHONE">010-1234-1005</Col>
+				<Col id="SALARY">4300</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="EMP_ID">E1006</Col>
+				<Col id="EMP_NM">한예린</Col>
+				<Col id="DEPT_CD">D004</Col>
+				<Col id="POSITION_CD">P01</Col>
+				<Col id="GENDER_CD">F</Col>
+				<Col id="HIRE_DT">20220214</Col>
+				<Col id="EMAIL">yrhan@hradmin.co.kr</Col>
+				<Col id="PHONE">010-1234-1006</Col>
+				<Col id="SALARY">3400</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="EMP_ID">E1007</Col>
+				<Col id="EMP_NM">오준서</Col>
+				<Col id="DEPT_CD">D005</Col>
+				<Col id="POSITION_CD">P03</Col>
+				<Col id="GENDER_CD">M</Col>
+				<Col id="HIRE_DT">20130520</Col>
+				<Col id="EMAIL">jsoh@hradmin.co.kr</Col>
+				<Col id="PHONE">010-1234-1007</Col>
+				<Col id="SALARY">5500</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="EMP_ID">E1008</Col>
+				<Col id="EMP_NM">강하은</Col>
+				<Col id="DEPT_CD">D005</Col>
+				<Col id="POSITION_CD">P01</Col>
+				<Col id="GENDER_CD">F</Col>
+				<Col id="HIRE_DT">20230102</Col>
+				<Col id="EMAIL">hekang@hradmin.co.kr</Col>
+				<Col id="PHONE">010-1234-1008</Col>
+				<Col id="SALARY">3200</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="EMP_ID">E1009</Col>
+				<Col id="EMP_NM">윤시우</Col>
+				<Col id="DEPT_CD">D002</Col>
+				<Col id="POSITION_CD">P01</Col>
+				<Col id="GENDER_CD">M</Col>
+				<Col id="HIRE_DT">20240318</Col>
+				<Col id="EMAIL">swyoon@hradmin.co.kr</Col>
+				<Col id="PHONE">010-1234-1009</Col>
+				<Col id="SALARY">3100</Col>
+				<Col id="USE_YN">Y</Col>
+			</Row>
+			<Row>
+				<Col id="EMP_ID">E1010</Col>
+				<Col id="EMP_NM">임채원</Col>
+				<Col id="DEPT_CD">D001</Col>
+				<Col id="POSITION_CD">P02</Col>
+				<Col id="GENDER_CD">F</Col>
+				<Col id="HIRE_DT">20160822</Col>
+				<Col id="EMAIL">cwlim@hradmin.co.kr</Col>
+				<Col id="PHONE">010-1234-1010</Col>
+				<Col id="SALARY">4700</Col>
+				<Col id="USE_YN">N</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>

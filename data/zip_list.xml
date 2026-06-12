@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="ErrorCode" type="int">0</Parameter>
+		<Parameter id="ErrorMsg" type="string">SUCCESS</Parameter>
+	</Parameters>
+	<Dataset id="dsZip">
+		<ColumnInfo>
+			<Column id="ZIP_CD" type="STRING" size="5"/>
+			<Column id="ADDR" type="STRING" size="200"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="ZIP_CD">04524</Col>
+				<Col id="ADDR">서울특별시 중구 세종대로 110</Col>
+			</Row>
+			<Row>
+				<Col id="ZIP_CD">06236</Col>
+				<Col id="ADDR">서울특별시 강남구 테헤란로 152</Col>
+			</Row>
+			<Row>
+				<Col id="ZIP_CD">07320</Col>
+				<Col id="ADDR">서울특별시 영등포구 여의대로 108</Col>
+			</Row>
+			<Row>
+				<Col id="ZIP_CD">13494</Col>
+				<Col id="ADDR">경기도 성남시 분당구 판교역로 235</Col>
+			</Row>
+			<Row>
+				<Col id="ZIP_CD">16677</Col>
+				<Col id="ADDR">경기도 수원시 영통구 삼성로 129</Col>
+			</Row>
+			<Row>
+				<Col id="ZIP_CD">34126</Col>
+				<Col id="ADDR">대전광역시 유성구 대학로 99</Col>
+			</Row>
+			<Row>
+				<Col id="ZIP_CD">48058</Col>
+				<Col id="ADDR">부산광역시 해운대구 센텀중앙로 79</Col>
+			</Row>
+			<Row>
+				<Col id="ZIP_CD">61186</Col>
+				<Col id="ADDR">광주광역시 북구 첨단과기로 123</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>

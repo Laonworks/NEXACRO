@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="EmpList" width="1280" height="720" titletext="HR Admin - 사원 목록" onload="EmpList_onload">
+    <Objects>
+      <Dataset id="dsEmp" onrowposchanged="dsEmp_onrowposchanged">
+        <ColumnInfo>
+          <Column id="EMP_ID" type="STRING" size="10"/>
+          <Column id="EMP_NM" type="STRING" size="50"/>
+          <Column id="DEPT_CD" type="STRING" size="10"/>
+          <Column id="POSITION_CD" type="STRING" size="10"/>
+          <Column id="GENDER_CD" type="STRING" size="1"/>
+          <Column id="HIRE_DT" type="STRING" size="8"/>
+          <Column id="EMAIL" type="STRING" size="100"/>
+          <Column id="PHONE" type="STRING" size="20"/>
+          <Column id="SALARY" type="INT" size="10"/>
+          <Column id="USE_YN" type="STRING" size="1"/>
+        </ColumnInfo>
+        <Rows>
+          <Row>
+            <Col id="EMP_ID">E1001</Col><Col id="EMP_NM">김민준</Col><Col id="DEPT_CD">D001</Col><Col id="POSITION_CD">P03</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20150302</Col><Col id="EMAIL">mjkim@hradmin.co.kr</Col><Col id="PHONE">010-1234-1001</Col><Col id="SALARY">5200</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1002</Col><Col id="EMP_NM">이서연</Col><Col id="DEPT_CD">D002</Col><Col id="POSITION_CD">P02</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20170710</Col><Col id="EMAIL">sylee@hradmin.co.kr</Col><Col id="PHONE">010-1234-1002</Col><Col id="SALARY">4500</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1003</Col><Col id="EMP_NM">박지훈</Col><Col id="DEPT_CD">D003</Col><Col id="POSITION_CD">P02</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20180115</Col><Col id="EMAIL">jhpark@hradmin.co.kr</Col><Col id="PHONE">010-1234-1003</Col><Col id="SALARY">4800</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1004</Col><Col id="EMP_NM">최수아</Col><Col id="DEPT_CD">D003</Col><Col id="POSITION_CD">P01</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20210906</Col><Col id="EMAIL">sachoi@hradmin.co.kr</Col><Col id="PHONE">010-1234-1004</Col><Col id="SALARY">3600</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1005</Col><Col id="EMP_NM">정도현</Col><Col id="DEPT_CD">D004</Col><Col id="POSITION_CD">P02</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20190401</Col><Col id="EMAIL">dhjung@hradmin.co.kr</Col><Col id="PHONE">010-1234-1005</Col><Col id="SALARY">4300</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1006</Col><Col id="EMP_NM">한예린</Col><Col id="DEPT_CD">D004</Col><Col id="POSITION_CD">P01</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20220214</Col><Col id="EMAIL">yrhan@hradmin.co.kr</Col><Col id="PHONE">010-1234-1006</Col><Col id="SALARY">3400</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1007</Col><Col id="EMP_NM">오준서</Col><Col id="DEPT_CD">D005</Col><Col id="POSITION_CD">P03</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20130520</Col><Col id="EMAIL">jsoh@hradmin.co.kr</Col><Col id="PHONE">010-1234-1007</Col><Col id="SALARY">5500</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1008</Col><Col id="EMP_NM">강하은</Col><Col id="DEPT_CD">D005</Col><Col id="POSITION_CD">P01</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20230102</Col><Col id="EMAIL">hekang@hradmin.co.kr</Col><Col id="PHONE">010-1234-1008</Col><Col id="SALARY">3200</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1009</Col><Col id="EMP_NM">윤시우</Col><Col id="DEPT_CD">D002</Col><Col id="POSITION_CD">P01</Col><Col id="GENDER_CD">M</Col><Col id="HIRE_DT">20240318</Col><Col id="EMAIL">swyoon@hradmin.co.kr</Col><Col id="PHONE">010-1234-1009</Col><Col id="SALARY">3100</Col><Col id="USE_YN">Y</Col>
+          </Row>
+          <Row>
+            <Col id="EMP_ID">E1010</Col><Col id="EMP_NM">임채원</Col><Col id="DEPT_CD">D001</Col><Col id="POSITION_CD">P02</Col><Col id="GENDER_CD">F</Col><Col id="HIRE_DT">20160822</Col><Col id="EMAIL">cwlim@hradmin.co.kr</Col><Col id="PHONE">010-1234-1010</Col><Col id="SALARY">4700</Col><Col id="USE_YN">N</Col>
+          </Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Layouts>
+      <Layout height="720" mobileorientation="none" width="1280">
+        <Static id="stFormTitle" taborder="0" text="사원 목록" left="20" top="15" width="200" height="30" font="bold 18px/normal &quot;Malgun Gothic&quot;" verticalAlign="middle"/>
+        <Static id="stSearchNm" taborder="1" text="사원명" left="780" top="18" width="60" height="26" verticalAlign="middle" textAlign="right"/>
+        <Edit id="edtSearchNm" taborder="2" left="850" top="15" width="180" height="30"/>
+        <Button id="btnSearch" taborder="3" text="조회" left="1040" top="15" width="80" height="30" onclick="btnSearch_onclick"/>
+        <Button id="btnReset" taborder="4" text="초기화" left="1130" top="15" width="80" height="30" onclick="btnReset_onclick"/>
+        <Grid id="grdEmp" taborder="5" left="20" top="55" width="1240" height="430" binddataset="dsEmp" autofittype="col">
+          <Formats>
+            <Format id="default">
+              <Columns>
+                <Column size="80"/>
+                <Column size="90"/>
+                <Column size="80"/>
+                <Column size="80"/>
+                <Column size="60"/>
+                <Column size="100"/>
+                <Column size="200"/>
+                <Column size="130"/>
+                <Column size="80"/>
+                <Column size="70"/>
+              </Columns>
+              <Rows>
+                <Row size="32" band="head"/>
+                <Row size="30"/>
+              </Rows>
+              <Band id="head">
+                <Cell text="사번"/>
+                <Cell col="1" text="사원명"/>
+                <Cell col="2" text="부서"/>
+                <Cell col="3" text="직급"/>
+                <Cell col="4" text="성별"/>
+                <Cell col="5" text="입사일"/>
+                <Cell col="6" text="이메일"/>
+                <Cell col="7" text="전화번호"/>
+                <Cell col="8" text="연봉"/>
+                <Cell col="9" text="재직"/>
+              </Band>
+              <Band id="body">
+                <Cell text="bind:EMP_ID" textAlign="center"/>
+                <Cell col="1" text="bind:EMP_NM" textAlign="center"/>
+                <Cell col="2" text="bind:DEPT_CD" textAlign="center"/>
+                <Cell col="3" text="bind:POSITION_CD" textAlign="center"/>
+                <Cell col="4" text="bind:GENDER_CD" textAlign="center"/>
+                <Cell col="5" text="bind:HIRE_DT" textAlign="center"/>
+                <Cell col="6" text="bind:EMAIL"/>
+                <Cell col="7" text="bind:PHONE" textAlign="center"/>
+                <Cell col="8" text="bind:SALARY" textAlign="right"/>
+                <Cell col="9" text="bind:USE_YN" textAlign="center"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Static id="stTotal" taborder="6" text="총 0명" left="20" top="490" width="200" height="24" color="#555555" verticalAlign="middle"/>
+        <Static id="stDetailTitle" taborder="7" text="선택 사원 상세" left="20" top="525" width="200" height="26" font="bold 14px/normal &quot;Malgun Gothic&quot;" verticalAlign="middle"/>
+        <Static id="stDtlEmpId" taborder="8" text="사번" left="20" top="560" width="70" height="30" verticalAlign="middle"/>
+        <Edit id="edtEmpId" taborder="9" left="95" top="560" width="150" height="30" readonly="true"/>
+        <Static id="stDtlEmpNm" taborder="10" text="사원명" left="270" top="560" width="70" height="30" verticalAlign="middle"/>
+        <Edit id="edtEmpNm" taborder="11" left="345" top="560" width="150" height="30" readonly="true"/>
+        <Static id="stDtlHireDt" taborder="12" text="입사일" left="520" top="560" width="70" height="30" verticalAlign="middle"/>
+        <Edit id="edtHireDt" taborder="13" left="595" top="560" width="150" height="30" readonly="true"/>
+        <Static id="stDtlSalary" taborder="14" text="연봉" left="770" top="560" width="70" height="30" verticalAlign="middle"/>
+        <Edit id="edtSalary" taborder="15" left="845" top="560" width="150" height="30" readonly="true"/>
+        <Static id="stDtlEmail" taborder="16" text="이메일" left="20" top="600" width="70" height="30" verticalAlign="middle"/>
+        <Edit id="edtEmail" taborder="17" left="95" top="600" width="400" height="30" readonly="true"/>
+        <Static id="stDtlPhone" taborder="18" text="전화번호" left="520" top="600" width="70" height="30" verticalAlign="middle"/>
+        <Edit id="edtPhone" taborder="19" left="595" top="600" width="150" height="30" readonly="true"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+/*******************************************************************************
+ * 02. 사원 목록 (EmpList.xfdl)
+ * - 학습 포인트: Dataset(Invisible Object), Grid 바인딩(binddataset),
+ *   rowposition과 onrowposchanged, getColumn으로 데이터 읽기
+ * - 2단계에서는 Dataset에 초기 데이터(InitValue)를 직접 입력해 사용합니다.
+ *   (5단계 서버 연동 실습에서 data/emp_list.xml 조회로 교체합니다)
+ * - 부서/직급은 아직 코드(D001, P01)가 그대로 보입니다.
+ *   → 3단계(코드 콤보), 8단계(공통코드 모듈)에서 이름 표시로 개선합니다.
+ ******************************************************************************/
+
+// 폼 로드 시: 건수 표시 + 첫 행 상세 표시
+this.EmpList_onload = function(obj, e)
+{
+	this.fnDisplayCount();
+	this.fnDisplayDetail(this.dsEmp.rowposition);
+};
+
+// Dataset의 현재 행(rowposition)이 바뀔 때마다 상세 영역 갱신
+// (Grid에서 행을 클릭하면 바인딩된 Dataset의 rowposition이 자동으로 이동)
+this.dsEmp_onrowposchanged = function(obj, e)
+{
+	this.fnDisplayDetail(e.newrow);
+};
+
+// 조회 버튼: 사원명 검색 (★ 과제 — 아래 힌트를 참고해 직접 구현해 보세요)
+this.btnSearch_onclick = function(obj, e)
+{
+	// [과제 힌트]
+	// var sName = this.edtSearchNm.value;
+	// 빈값이면 this.dsEmp.filter("") 로 필터 해제,
+	// 값이 있으면 this.dsEmp.filter("String(EMP_NM).indexOf('" + sName + "') >= 0");
+	// 마지막에 this.fnDisplayCount(); 호출로 건수 갱신
+	this.alert("과제: filter()를 이용해 사원명 검색을 구현해 보세요.");
+};
+
+// 초기화 버튼: 검색 조건과 필터 해제
+this.btnReset_onclick = function(obj, e)
+{
+	this.edtSearchNm.set_value("");
+	this.dsEmp.filter("");
+	this.fnDisplayCount();
+};
+
+// 선택된 행의 데이터를 하단 상세 영역에 표시
+this.fnDisplayDetail = function(nRow)
+{
+	if (nRow < 0) {
+		this.edtEmpId.set_value("");
+		this.edtEmpNm.set_value("");
+		this.edtHireDt.set_value("");
+		this.edtSalary.set_value("");
+		this.edtEmail.set_value("");
+		this.edtPhone.set_value("");
+		return;
+	}
+	this.edtEmpId.set_value(this.dsEmp.getColumn(nRow, "EMP_ID"));
+	this.edtEmpNm.set_value(this.dsEmp.getColumn(nRow, "EMP_NM"));
+	this.edtHireDt.set_value(this.dsEmp.getColumn(nRow, "HIRE_DT"));
+	this.edtSalary.set_value(this.dsEmp.getColumn(nRow, "SALARY") + " 만원");
+	this.edtEmail.set_value(this.dsEmp.getColumn(nRow, "EMAIL"));
+	this.edtPhone.set_value(this.dsEmp.getColumn(nRow, "PHONE"));
+};
+
+// 조회 건수 표시 (filter 적용 시 getRowCount()는 보이는 행 수만 반환)
+this.fnDisplayCount = function()
+{
+	this.stTotal.set_text("총 " + this.dsEmp.getRowCount() + "명");
+};
+]]></Script>
+  </Form>
+</FDL>

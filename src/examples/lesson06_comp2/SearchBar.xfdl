@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  [6차시] 기본 컴포넌트 II — 검색 조건 영역
+  학습 포인트
+   1. Combo + innerdataset (코드/명칭 분리 — 실무 코드성 데이터의 기본 패턴)
+   2. Calendar 의 dateformat, value (yyyyMMdd 문자열)
+   3. anchor: right 속성을 주면 창 폭에 따라 검색영역이 늘어난다
+   4. 컴포넌트 조합으로 "검색바" 라는 실무 단위를 완성
+-->
+<FDL version="2.1">
+  <Form id="SearchBar" width="900" height="600" titletext="검색 조건 영역">
+    <Objects>
+      <Dataset id="ds_dept">
+        <ColumnInfo>
+          <Column id="CODE" type="STRING" size="10"/>
+          <Column id="NAME" type="STRING" size="30"/>
+        </ColumnInfo>
+        <Rows>
+          <Row><Col id="CODE"></Col><Col id="NAME">전체</Col></Row>
+          <Row><Col id="CODE">D01</Col><Col id="NAME">개발팀</Col></Row>
+          <Row><Col id="CODE">D02</Col><Col id="NAME">영업팀</Col></Row>
+          <Row><Col id="CODE">D03</Col><Col id="NAME">인사팀</Col></Row>
+        </Rows>
+      </Dataset>
+    </Objects>
+    <Layouts>
+      <Layout height="600" width="900">
+        <!-- 검색영역 배경: right="20" 덕분에 창을 늘리면 함께 늘어남 -->
+        <Static id="sta_bg" taborder="0" text="" left="20" top="20" right="20" height="60"
+                style="background:#eff5f8; border:1px solid #cccccc;"/>
+
+        <Static id="sta_dept" taborder="1" text="부서" left="40" top="36" width="50" height="28"/>
+        <Combo  id="cbo_dept" taborder="2" left="90" top="36" width="140" height="28"
+                innerdataset="ds_dept" codecolumn="CODE" datacolumn="NAME" index="0"/>
+
+        <Static id="sta_name" taborder="3" text="이름" left="250" top="36" width="50" height="28"/>
+        <Edit   id="edt_name" taborder="4" left="300" top="36" width="140" height="28"/>
+
+        <Static id="sta_date" taborder="5" text="입사일" left="460" top="36" width="60" height="28"/>
+        <Calendar id="cal_from" taborder="6" left="520" top="36" width="130" height="28" dateformat="yyyy-MM-dd"/>
+        <Static id="sta_tilde" taborder="7" text="~" left="652" top="36" width="16" height="28"/>
+        <Calendar id="cal_to"   taborder="8" left="670" top="36" width="130" height="28" dateformat="yyyy-MM-dd"/>
+
+        <!-- right 기준 배치: 창이 늘어나도 항상 오른쪽 끝 -->
+        <Button id="btn_search" taborder="9" text="조회" top="36" right="40" width="70" height="28" onclick="btn_search_onclick"/>
+
+        <TextArea id="txa_result" taborder="10" left="20" top="100" right="20" bottom="20" readonly="true"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+this.btn_search_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	// Combo: value = CODE 컬럼 값, text = NAME 컬럼 값
+	var deptCode = this.cbo_dept.value;
+	var deptName = this.cbo_dept.text;
+
+	// Calendar: value 는 "yyyyMMdd" 형식 문자열 (표시 형식과 별개!)
+	var dateFrom = this.cal_from.value;
+	var dateTo   = this.cal_to.value;
+
+	// 날짜 범위 검증 — 문자열 비교로 충분 (yyyyMMdd 이므로)
+	if (dateFrom != null && dateTo != null && dateFrom > dateTo) {
+		alert("시작일이 종료일보다 늦을 수 없습니다.");
+		this.cal_from.setFocus();
+		return;
+	}
+
+	var msg = "[검색 조건]\n";
+	msg += "부서 : "   + deptName + " (코드: " + (deptCode || "전체") + ")\n";
+	msg += "이름 : "   + (this.edt_name.value || "(전체)") + "\n";
+	msg += "입사일 : " + (dateFrom || "-") + " ~ " + (dateTo || "-") + "\n\n";
+	msg += "→ 10차시에서 이 조건으로 실제 서버 조회를 수행합니다.";
+	this.txa_result.set_value(msg);
+};
+]]></Script>
+  </Form>
+</FDL>

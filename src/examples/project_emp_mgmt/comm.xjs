@@ -1,0 +1,68 @@
+/*
+  [13~16차시 프로젝트] 공통 스크립트 (comm.xjs)
+  - 12차시 lib_comm.xjs 를 프로젝트용으로 확장한 버전
+  - include "Lib::comm.xjs"; 로 사용
+*/
+
+this.gfn_isEmpty = function(val)
+{
+	return (val == null || String(val).trim() == "");
+};
+
+this.gfn_nvl = function(val, def)
+{
+	return this.gfn_isEmpty(val) ? (def == null ? "" : def) : val;
+};
+
+this.gfn_alert = function(msg)
+{
+	alert(msg);
+};
+
+this.gfn_confirm = function(msg)
+{
+	return confirm(msg);
+};
+
+/* ── 공통 transaction 래퍼 ──
+   매번 6개 인자를 나열하는 대신 한 곳에서 관리.
+   장점: 로딩 표시, 공통 에러 처리, 로그를 여기 한 곳에만 추가하면 된다. */
+this.gfn_transaction = function(svcID, url, inDs, outDs, args, callback)
+{
+	trace("[TX 요청] " + svcID + " → " + url);
+	this.transaction(svcID, url, this.gfn_nvl(inDs), this.gfn_nvl(outDs),
+	                 this.gfn_nvl(args), callback);
+};
+
+/* 공통 콜백 1차 처리 — 각 폼의 콜백 첫 줄에서 호출
+   반환 true = 정상, false = 오류(이미 메시지 표시함)            */
+this.gfn_callbackCheck = function(svcID, errorCode, errorMsg)
+{
+	trace("[TX 응답] " + svcID + " code=" + errorCode);
+	if (errorCode < 0) {
+		this.gfn_alert("처리 중 오류가 발생했습니다.\n[" + svcID + "] " + errorMsg);
+		return false;
+	}
+	return true;
+};
+
+/* 공통 모달 팝업 */
+this.gfn_openPopup = function(id, url, args, callback, w, h)
+{
+	var popup = new ChildFrame();
+	popup.init(id, 0, 0, this.gfn_nvl(w, 500), this.gfn_nvl(h, 400), null, null, url);
+	popup.set_dragmovetype("all");
+	popup.set_openalign("center middle");
+	popup.showModal(this.getOwnerFrame(), args, this, callback);
+};
+
+/* Dataset 변경분 존재 여부 */
+this.gfn_hasChanges = function(ds)
+{
+	if (ds.getDeletedRowCount() > 0) return true;
+	for (var i = 0; i < ds.getRowCount(); i++) {
+		var t = ds.getRowType(i);
+		if (t == nexacro.Dataset.ROWTYPE_INSERT || t == nexacro.Dataset.ROWTYPE_UPDATE) return true;
+	}
+	return false;
+};

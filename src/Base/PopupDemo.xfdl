@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FDL version="2.1">
+  <Form id="PopupDemo" width="1280" height="720" titletext="HR Admin - 공통 팝업 데모">
+    <Layouts>
+      <Layout height="720" mobileorientation="none" width="1280">
+        <Static id="stFormTitle" taborder="0" text="공통 팝업 호출 데모" left="20" top="15" width="300" height="30" font="bold 18px/normal &quot;Malgun Gothic&quot;" verticalAlign="middle"/>
+        <Static id="stDesc" taborder="1" text="담당 사원을 [사원검색] 팝업으로 선택합니다. 팝업이 반환한 값이 아래 입력란에 채워집니다." left="20" top="50" width="700" height="26" color="#888888" verticalAlign="middle"/>
+        <Static id="stEmpId" taborder="2" text="담당 사번" left="20" top="100" width="90" height="32" verticalAlign="middle"/>
+        <Edit id="edtEmpId" taborder="3" left="115" top="100" width="160" height="32" readonly="true"/>
+        <Static id="stEmpNm" taborder="4" text="담당 사원명" left="295" top="100" width="90" height="32" verticalAlign="middle"/>
+        <Edit id="edtEmpNm" taborder="5" left="390" top="100" width="160" height="32" readonly="true"/>
+        <Button id="btnSearchEmp" taborder="6" text="사원검색 🔍" left="560" top="100" width="110" height="32" onclick="btnSearchEmp_onclick"/>
+        <Static id="stZip" taborder="7" text="우편번호" left="20" top="145" width="90" height="32" verticalAlign="middle"/>
+        <Edit id="edtZipCd" taborder="8" left="115" top="145" width="160" height="32" readonly="true"/>
+        <Static id="stAddr" taborder="9" text="주소" left="295" top="145" width="90" height="32" verticalAlign="middle"/>
+        <Edit id="edtAddr" taborder="10" left="390" top="145" width="400" height="32" readonly="true"/>
+        <Button id="btnSearchZip" taborder="11" text="우편번호 🔍" left="800" top="145" width="110" height="32" onclick="btnSearchZip_onclick"/>
+        <Static id="stLogTitle" taborder="12" text="호출/반환 로그" left="20" top="210" width="200" height="24" font="bold 13px/normal &quot;Malgun Gothic&quot;" verticalAlign="middle"/>
+        <TextArea id="txaLog" taborder="13" left="20" top="238" width="1240" height="200" readonly="true" wordwrap="char"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+include "Comm::comm.xjs";   // (8단계에서 추가) 공통 함수 라이브러리
+
+/*******************************************************************************
+ * 07. 공통 팝업 호출 데모 (PopupDemo.xfdl)  [중급]
+ * - 학습 포인트: ChildFrame 동적 생성 + showModal()로 모달 팝업 호출,
+ *   인자 전달(objArguments), 콜백으로 반환값 수신(JSON 파싱)
+ * - (8단계 리팩토링 완료) 화면에 있던 fnOpenPopup이 사라지고
+ *   공통모듈의 this.gfn_openPopup() 호출 한 줄로 교체되었습니다.
+ ******************************************************************************/
+
+// 사원검색 버튼 → 사원검색 팝업 호출
+this.btnSearchEmp_onclick = function(obj, e)
+{
+	// 현재 입력된 사원명을 초기 검색어로 전달
+	var oArgs = { sInitNm : this.edtEmpNm.value };
+	this.gfn_openPopup("EmpSearchPopup", "Base::EmpSearchPopup.xfdl", 600, 500, oArgs, "fnEmpPopupCallback");
+	this.fnLog("사원검색 팝업 호출 — 인자: " + JSON.stringify(oArgs));
+};
+
+// 사원검색 팝업이 닫힐 때 호출되는 콜백 — 반환값(JSON 문자열) 수신
+this.fnEmpPopupCallback = function(sPopupId, sRtn)
+{
+	this.fnLog("팝업 닫힘 — 반환값: " + (sRtn == "" ? "(취소)" : sRtn));
+	if (sRtn == null || sRtn == "") {
+		return;   // 취소
+	}
+	var oRtn = JSON.parse(sRtn);
+	this.edtEmpId.set_value(oRtn.empId);
+	this.edtEmpNm.set_value(oRtn.empNm);
+};
+
+// 우편번호 버튼 (★ 과제 — ZipPopup.xfdl을 직접 만들어 연결하세요)
+this.btnSearchZip_onclick = function(obj, e)
+{
+	// [과제 힌트]
+	// 1) EmpSearchPopup.xfdl을 본떠 ZipPopup.xfdl 작성
+	//    - 데이터: "svcData::zip_list.xml" (dsZip=dsZip), 컬럼 ZIP_CD/ADDR
+	//    - 주소 일부로 filter 검색, 더블클릭/선택 시
+	//      close(JSON.stringify({zipCd:..., addr:...}))
+	// 2) 여기서 fnOpenPopup("ZipPopup", "Base::ZipPopup.xfdl", 500, 450, {}, "fnZipPopupCallback") 호출
+	// 3) fnZipPopupCallback에서 edtZipCd / edtAddr 채우기
+	this.alert("과제: ZipPopup.xfdl을 만들어 우편번호 검색을 완성해 보세요.");
+};
+
+this.fnLog = function(sMsg)
+{
+	var sNow = new Date().toTimeString().substr(0, 8);
+	this.txaLog.set_value(this.txaLog.value + "[" + sNow + "] " + sMsg + "\n");
+};
+]]></Script>
+  </Form>
+</FDL>

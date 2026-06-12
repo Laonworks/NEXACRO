@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root xmlns="http://www.nexacroplatform.com/platform/dataset">
+	<Parameters>
+		<Parameter id="ErrorCode" type="int">0</Parameter>
+		<Parameter id="ErrorMsg" type="string">SUCCESS</Parameter>
+	</Parameters>
+	<Dataset id="dsCode">
+		<ColumnInfo>
+			<Column id="GROUP_CD" type="STRING" size="10"/>
+			<Column id="CODE" type="STRING" size="10"/>
+			<Column id="CODE_NM" type="STRING" size="50"/>
+			<Column id="SORT_NO" type="INT" size="5"/>
+		</ColumnInfo>
+		<Rows>
+			<Row>
+				<Col id="GROUP_CD">POSITION</Col>
+				<Col id="CODE">P01</Col>
+				<Col id="CODE_NM">사원</Col>
+				<Col id="SORT_NO">1</Col>
+			</Row>
+			<Row>
+				<Col id="GROUP_CD">POSITION</Col>
+				<Col id="CODE">P02</Col>
+				<Col id="CODE_NM">과장</Col>
+				<Col id="SORT_NO">2</Col>
+			</Row>
+			<Row>
+				<Col id="GROUP_CD">POSITION</Col>
+				<Col id="CODE">P03</Col>
+				<Col id="CODE_NM">부장</Col>
+				<Col id="SORT_NO">3</Col>
+			</Row>
+			<Row>
+				<Col id="GROUP_CD">GENDER</Col>
+				<Col id="CODE">M</Col>
+				<Col id="CODE_NM">남</Col>
+				<Col id="SORT_NO">1</Col>
+			</Row>
+			<Row>
+				<Col id="GROUP_CD">GENDER</Col>
+				<Col id="CODE">F</Col>
+				<Col id="CODE_NM">여</Col>
+				<Col id="SORT_NO">2</Col>
+			</Row>
+			<Row>
+				<Col id="GROUP_CD">USE_YN</Col>
+				<Col id="CODE">Y</Col>
+				<Col id="CODE_NM">사용</Col>
+				<Col id="SORT_NO">1</Col>
+			</Row>
+			<Row>
+				<Col id="GROUP_CD">USE_YN</Col>
+				<Col id="CODE">N</Col>
+				<Col id="CODE_NM">미사용</Col>
+				<Col id="SORT_NO">2</Col>
+			</Row>
+		</Rows>
+	</Dataset>
+</Root>

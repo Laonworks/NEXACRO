@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  [15차시] 사원 상세/등록 화면 (EMP_M002)
+  - 신규 모드(empId=null) / 수정 모드(empId 있음) 겸용 — SI 표준 패턴
+  - 단건 Dataset + BindItem 으로 폼 구성 (8차시 바인딩의 실전 적용)
+  - 부서 검색 팝업(POP_Dept) 연동, 저장/삭제 후 목록 복귀
+-->
+<FDL version="2.1">
+  <Form id="EMP_M002_Detail" width="1070" height="744" titletext="사원 상세" onload="EMP_M002_Detail_onload">
+    <Objects>
+      <!-- 단건 처리용 Dataset: 화면 입력값의 그릇 -->
+      <Dataset id="ds_detail">
+        <ColumnInfo>
+          <Column id="EMP_ID"  type="STRING" size="10"/>
+          <Column id="EMP_NM"  type="STRING" size="30"/>
+          <Column id="DEPT_CD" type="STRING" size="10"/>
+          <Column id="DEPT_NM" type="STRING" size="30"/>
+          <Column id="SALARY"  type="INT"/>
+          <Column id="HIRE_DT" type="STRING" size="8"/>
+          <Column id="EMAIL"   type="STRING" size="50"/>
+        </ColumnInfo>
+      </Dataset>
+      <Dataset id="ds_emp"/>
+    </Objects>
+    <Layouts>
+      <Layout height="744" width="1070">
+        <Static id="sta_title" taborder="0" text="사원 상세" left="20" top="15" width="200" height="30" font="bold 13pt"/>
+
+        <Static id="sta_id" taborder="1" text="사번" left="40" top="70" width="90" height="30"/>
+        <Edit id="edt_id" taborder="2" left="140" top="70" width="180" height="30" readonly="true"
+              tooltiptext="사번은 서버가 자동 채번합니다"/>
+
+        <Static id="sta_nm" taborder="3" text="이름 *" left="40" top="112" width="90" height="30"/>
+        <Edit id="edt_nm" taborder="4" left="140" top="112" width="180" height="30" maxlength="30"/>
+
+        <Static id="sta_dept" taborder="5" text="부서 *" left="40" top="154" width="90" height="30"/>
+        <Edit id="edt_deptNm" taborder="6" left="140" top="154" width="146" height="30" readonly="true"/>
+        <Button id="btn_deptPop" taborder="7" text="🔍" left="290" top="154" width="32" height="30" onclick="btn_deptPop_onclick"/>
+
+        <Static id="sta_sal" taborder="8" text="연봉(만원)" left="40" top="196" width="90" height="30"/>
+        <MaskEdit id="msk_sal" taborder="9" left="140" top="196" width="180" height="30" type="number" mask="#,##0"/>
+
+        <Static id="sta_hire" taborder="10" text="입사일" left="40" top="238" width="90" height="30"/>
+        <Calendar id="cal_hire" taborder="11" left="140" top="238" width="180" height="30" dateformat="yyyy-MM-dd"/>
+
+        <Static id="sta_email" taborder="12" text="이메일" left="40" top="280" width="90" height="30"/>
+        <Edit id="edt_email" taborder="13" left="140" top="280" width="280" height="30" maxlength="50"/>
+
+        <Button id="btn_save"   taborder="14" text="저장" left="140" top="340" width="90" height="34" onclick="btn_save_onclick"/>
+        <Button id="btn_delete" taborder="15" text="삭제" left="240" top="340" width="90" height="34" onclick="btn_delete_onclick"/>
+        <Button id="btn_list"   taborder="16" text="목록" left="340" top="340" width="90" height="34" onclick="btn_list_onclick"/>
+      </Layout>
+    </Layouts>
+    <Bind>
+      <BindItem id="item0" compid="edt_id"    propid="value" datasetid="ds_detail" columnid="EMP_ID"/>
+      <BindItem id="item1" compid="edt_nm"    propid="value" datasetid="ds_detail" columnid="EMP_NM"/>
+      <BindItem id="item2" compid="edt_deptNm" propid="value" datasetid="ds_detail" columnid="DEPT_NM"/>
+      <BindItem id="item3" compid="msk_sal"   propid="value" datasetid="ds_detail" columnid="SALARY"/>
+      <BindItem id="item4" compid="cal_hire"  propid="value" datasetid="ds_detail" columnid="HIRE_DT"/>
+      <BindItem id="item5" compid="edt_email" propid="value" datasetid="ds_detail" columnid="EMAIL"/>
+    </Bind>
+    <Script type="xscript5.1"><![CDATA[
+include "Lib::comm.xjs";
+
+/* 모드 플래그: 신규(true) / 수정(false) */
+this.gv_isNew = true;
+
+this.EMP_M002_Detail_onload = function(obj:nexacro.Form, e:nexacro.LoadEventInfo)
+{
+	// 부모(PRJ_Main)가 넘긴 사번으로 모드 결정
+	var empId = this.parent.parent.gv_empId;
+	this.gv_isNew = this.gfn_isEmpty(empId);
+
+	this.ds_detail.clearData();
+	this.ds_detail.addRow();   // 입력 그릇이 될 빈 행 1개 (바인딩 동작 조건)
+
+	if (this.gv_isNew) {
+		this.sta_title.set_text("사원 신규 등록");
+		this.btn_delete.set_enable(false);
+		this.edt_nm.setFocus();
+	}
+	else {
+		this.sta_title.set_text("사원 상세 (" + empId + ")");
+		// 단건 조회: 목록과 같은 서비스를 사번 조건으로 재사용해도 충분
+		this.gfn_transaction("svcEmpOne", "svc::emp/list.do", "", "ds_emp=ds_out",
+		                     "EMP_NM=", "fn_callback");
+		this.gv_empId = empId;
+	}
+};
+
+this.fn_callback = function(svcID, errorCode, errorMsg)
+{
+	if (!this.gfn_callbackCheck(svcID, errorCode, errorMsg)) return;
+
+	if (svcID == "svcEmpOne") {
+		var nRow = this.ds_emp.findRow("EMP_ID", this.gv_empId);
+		if (nRow < 0) { this.gfn_alert("사원 정보를 찾을 수 없습니다."); return; }
+		// 조회 결과 → 상세 Dataset 으로 복사
+		this.ds_detail.copyRow(0, this.ds_emp, nRow);
+	}
+	else if (svcID == "svcEmpSave") {
+		this.gfn_alert(errorMsg);
+		this.parent.parent.fn_moveList();   // 저장 후 목록 복귀
+	}
+};
+
+/* ── 부서 검색 팝업 (12차시 패턴) ── */
+this.btn_deptPop_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	this.gfn_openPopup("popDept", "Base::POP_Dept.xfdl", {}, "fn_deptCallback", 420, 380);
+};
+
+this.fn_deptCallback = function(popupId, rtnVal)
+{
+	if (this.gfn_isEmpty(rtnVal)) return;
+	var dept = JSON.parse(rtnVal);
+	this.ds_detail.setColumn(0, "DEPT_CD", dept.CODE);
+	this.ds_detail.setColumn(0, "DEPT_NM", dept.NAME);   // 바인딩이 화면을 자동 갱신
+};
+
+/* ── 저장 ── */
+this.btn_save_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	if (!this.fn_validate()) return;
+	if (!this.gfn_confirm("저장하시겠습니까?")) return;
+
+	/* 신규/수정 모드에 맞게 rowtype 을 정리한 뒤 변경분 전송.
+	   수정 모드 진입 직후 copyRow 로 rowtype 이 꼬일 수 있으므로
+	   명시적으로 상태를 만들어 주는 것이 안전하다.            */
+	if (this.gv_isNew) {
+		// addRow 만 했으므로 이미 INSERT 상태 — 그대로 전송
+	}
+	else {
+		// 미변경 저장 방지
+		if (this.ds_detail.getRowType(0) != nexacro.Dataset.ROWTYPE_UPDATE
+			&& this.ds_detail.getRowType(0) != nexacro.Dataset.ROWTYPE_INSERT) {
+			this.gfn_alert("변경된 내용이 없습니다.");
+			return;
+		}
+	}
+
+	this.gfn_transaction("svcEmpSave", "svc::emp/save.do",
+	                     "ds_save=ds_detail:U", "", "", "fn_callback");
+};
+
+/* ── 삭제: deleteRow 후 변경분 전송 ── */
+this.btn_delete_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	if (!this.gfn_confirm("정말 삭제하시겠습니까?")) return;
+
+	this.ds_detail.deleteRow(0);
+	this.gfn_transaction("svcEmpSave", "svc::emp/save.do",
+	                     "ds_save=ds_detail:U", "", "", "fn_callback");
+};
+
+this.btn_list_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	this.parent.parent.fn_moveList();
+};
+
+/* 필수값 검증 (4차시 패턴의 실전 적용) */
+this.fn_validate = function()
+{
+	if (this.gfn_isEmpty(this.ds_detail.getColumn(0, "EMP_NM"))) {
+		this.gfn_alert("이름은 필수입니다.");
+		this.edt_nm.setFocus();
+		return false;
+	}
+	if (this.gfn_isEmpty(this.ds_detail.getColumn(0, "DEPT_CD"))) {
+		this.gfn_alert("부서를 선택하세요.");
+		this.btn_deptPop.setFocus();
+		return false;
+	}
+	var email = this.ds_detail.getColumn(0, "EMAIL");
+	if (!this.gfn_isEmpty(email) && !/^[\w.-]+@[\w.-]+\.\w{2,}$/.test(email)) {
+		this.gfn_alert("이메일 형식이 올바르지 않습니다.");
+		this.edt_email.setFocus();
+		return false;
+	}
+	return true;
+};
+]]></Script>
+  </Form>
+</FDL>

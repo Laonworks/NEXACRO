@@ -1,0 +1,9 @@
+# macOS
+.DS_Store
+
+# MS Office 임시 파일
+~$*
+
+# Nexacro Studio 빌드/캐시 산출물 (프로젝트를 저장소 안에 만들 경우 대비)
+_generate_/
+nexacro17lib/

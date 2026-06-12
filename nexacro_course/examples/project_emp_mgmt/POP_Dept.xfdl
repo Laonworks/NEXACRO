@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  [15차시] 부서 검색 팝업 (POP_Dept)
+  - 12차시 EmpPopup 패턴의 프로젝트 적용 (단순화 버전)
+-->
+<FDL version="2.1">
+  <Form id="POP_Dept" width="420" height="380" titletext="부서 검색" onload="POP_Dept_onload">
+    <Objects>
+      <Dataset id="ds_dept"/>
+    </Objects>
+    <Layouts>
+      <Layout height="380" width="420">
+        <Grid id="grd_dept" taborder="0" left="20" top="20" right="20" bottom="60"
+              binddataset="ds_dept" oncelldblclick="grd_dept_oncelldblclick">
+          <Formats>
+            <Format id="default">
+              <Columns><Column size="120"/><Column size="220"/></Columns>
+              <Rows><Row size="28" band="head"/><Row size="28" band="body"/></Rows>
+              <Band id="head"><Cell text="부서코드"/><Cell col="1" text="부서명"/></Band>
+              <Band id="body">
+                <Cell text="bind:CODE" textAlign="center"/><Cell col="1" text="bind:NAME"/>
+              </Band>
+            </Format>
+          </Formats>
+        </Grid>
+        <Button id="btn_select" taborder="1" text="선택" right="110" bottom="20" width="80" height="30" onclick="btn_select_onclick"/>
+        <Button id="btn_close"  taborder="2" text="닫기" right="20"  bottom="20" width="80" height="30" onclick="btn_close_onclick"/>
+      </Layout>
+    </Layouts>
+    <Script type="xscript5.1"><![CDATA[
+include "Lib::comm.xjs";
+
+this.POP_Dept_onload = function(obj:nexacro.Form, e:nexacro.LoadEventInfo)
+{
+	this.gfn_transaction("svcDeptList", "svc::dept/list.do", "", "ds_dept=ds_dept", "", "fn_callback");
+};
+
+this.fn_callback = function(svcID, errorCode, errorMsg)
+{
+	this.gfn_callbackCheck(svcID, errorCode, errorMsg);
+};
+
+this.grd_dept_oncelldblclick = function(obj:nexacro.Grid, e:nexacro.GridClickEventInfo)
+{
+	this.fn_select();
+};
+
+this.btn_select_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	this.fn_select();
+};
+
+this.fn_select = function()
+{
+	var nRow = this.ds_dept.rowposition;
+	if (nRow < 0) { this.gfn_alert("부서를 선택하세요."); return; }
+
+	this.close(JSON.stringify({
+		CODE: this.ds_dept.getColumn(nRow, "CODE"),
+		NAME: this.ds_dept.getColumn(nRow, "NAME")
+	}));
+};
+
+this.btn_close_onclick = function(obj:nexacro.Button, e:nexacro.ClickEventInfo)
+{
+	this.close();
+};
+]]></Script>
+  </Form>
+</FDL>
